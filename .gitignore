@@ -1,0 +1,51 @@
+# === Java specific files ===
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# === Build Folders ===
+# Standard output directories for IntelliJ, Eclipse, and Maven
+bin/
+out/
+target/
+build/
+
+# === IDE specific files ===
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+
+# Eclipse
+.settings/
+.project
+.classpath
+.factorypath
+
+# VS Code
+.vscode/
+
+# === Operating System specific files ===
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+desktop.ini

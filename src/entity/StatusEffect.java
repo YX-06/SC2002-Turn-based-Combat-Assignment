@@ -17,6 +17,9 @@ public abstract class StatusEffect {
     // any potential expire effect that may be done
     public abstract void onExpire(Combatant target);
     
+    public int modifyIncomingDamage(int damage) {
+        return damage; // default is no change -> for future effects may change
+    }
     // for extensibility in future in case any other status effect may want to prevent action
     public boolean preventsAction() {
             return false;

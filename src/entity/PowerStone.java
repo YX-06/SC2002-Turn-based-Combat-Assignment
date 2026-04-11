@@ -15,12 +15,4 @@ public class PowerStone extends Item {
         this.target = target;
     }
 
-    @Override
-    public ActionResult use(Player player, BattleContext context) {
-        ActionResult skillResult = player.executeSpecialSkill(target, context);
-        String msg = player.getName() + " → Item → Power Stone used → "
-                + player.getSpecialSkillName() + " triggered!\n" + skillResult.getMessage()
-                + "\n  Cooldown unchanged (Power Stone does not affect cooldown) | Power Stone consumed";
-        return new ActionResult("Power Stone", skillResult.getDamageDealt(), msg, true);
-    }
 }

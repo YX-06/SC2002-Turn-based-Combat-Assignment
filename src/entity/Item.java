@@ -1,7 +1,7 @@
 package entity;
 
-// Abstract item class. Items are single-use consumables chosen at game start.
-// Subclassed by Potion, SmokeBomb, PowerStone.
+// items are single use
+
 public abstract class Item {
     protected String name;
     protected boolean consumed;
@@ -11,7 +11,7 @@ public abstract class Item {
         this.consumed = false;
     }
 
-    // Use this item in battle. Each subclass defines its own effect.
+    // use the item in battle with each subclass having a different result
     public abstract ActionResult use(Player player, BattleContext context);
 
     public void markConsumed() {

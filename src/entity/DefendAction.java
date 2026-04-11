@@ -11,10 +11,10 @@ public class DefendAction implements Action {
 
     @Override
     public ActionResult execute(BattleContext context) {
-        StatusEffect defendBuff = new StatusEffect(StatusEffectType.DEFEND_BUFF, 10, 2);
+        StatusEffect defendBuff = new DefendBuffEffect(2, 10);
         player.addStatusEffect(defendBuff);
-        String msg = player.getName() + " → Defend: DEF +" + 10 + " for 2 turns (DEF: " + player.getDef() + ")";
-        return new ActionResult("Defend", 0, msg);
+        String msg = player.getName() + " -> Defend: DEF +10 for 2 turns (DEF: " + player.getDef() + ")";
+        return new ActionResult("Defend", msg);
     }
 
     @Override

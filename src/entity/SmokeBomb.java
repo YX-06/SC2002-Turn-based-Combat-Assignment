@@ -10,8 +10,8 @@ public class SmokeBomb extends Item {
 
     @Override
     public ActionResult use(Player player, BattleContext context) {
-        player.addStatusEffect(new StatusEffect(StatusEffectType.SMOKE_BOMB_EFFECT, 0, 2));
-        String msg = player.getName() + " → Item → Smoke Bomb used: Enemy attacks deal 0 damage this turn + next";
-        return new ActionResult("Smoke Bomb", 0, msg);
+        player.addStatusEffect(new SmokeBombEffect(2));
+        String msg = player.getName() + " -> Item -> Smoke Bomb used: Enemy attacks deal 0 damage this turn + next";
+        return new ActionResult("Smoke Bomb", msg);
     }
 }

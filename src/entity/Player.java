@@ -51,8 +51,6 @@ public abstract class Player extends Combatant {
         return false;
     }
 
-
-
     // Returns the display name of this player's special skill.
     public abstract String getSpecialSkillName();
 }

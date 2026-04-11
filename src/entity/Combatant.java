@@ -1,6 +1,7 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 // Abstract base class for all combatants (players and enemies).
@@ -13,6 +14,7 @@ public abstract class Combatant {
     protected int def;
     protected int speed;
     protected List<StatusEffect> statusEffects;
+    protected List<Action> actions;
 
     public Combatant(String name, int maxHP, int atk, int def, int speed) {
         this.name = name;
@@ -31,20 +33,62 @@ public abstract class Combatant {
         return hp > 0;
     }
 
-    // Reduce HP by the given damage amount. HP cannot go below 0.
+    // DAMAGE (Cannot go below 0)
     public void takeDamage(int damage) {
         hp = Math.max(0, hp - damage);
     }
 
-    // Heal by the given amount, capped at maxHP.
+    // HEAL (Capped at maxHP)
     public void heal(int amount) {
         hp = Math.min(hp + amount, maxHP);
     }
 
+    // STATUS EFFECTS
+    public void addStatusEffect(StatusEffect effect) {
+        effect.onApply(this);
+        statusEffects.add(effect);
+    }
 
+    public void tickEffects() {
+        Iterator<StatusEffect> it = statusEffects.iterator();
+
+        while (it.hasNext()) {
+            StatusEffect effect = it.next();
+            effect.onTick(this);
+            effect.reduceDuration();
+
+            if (effect.isExpired()) {
+                effect.onExpire(this);
+                it.remove();
+            }
+        }
+    }
+
+    public boolean canAct() {
+        for (StatusEffect effect : statusEffects) {
+            if (effect.preventsAction()) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    // based on its status effects, checks if the damage its taking in will change
+    public int modifyIncomingDamage(int damage) {
+        int modified = damage;
+
+        for (StatusEffect effect : statusEffects) {
+            modified = effect.modifyIncomingDamage(modified);
+        }
+
+        return modified;
+    }
 
     
-
+    // ACTIONS
+    public List<Action> getActions() {
+        return actions;
+    }
 
 
     // Getters and setters

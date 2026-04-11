@@ -13,7 +13,7 @@ public class Potion extends Item {
         int oldHp = player.getHp();
         player.heal(100);
         int healed = player.getHp() - oldHp;
-        String msg = player.getName() + " → Item → Potion used: HP: " + oldHp + " → " + player.getHp() + " (+" + healed + ")";
-        return new ActionResult("Potion", 0, msg);
+        String msg = player.getName() + " -> Item -> Potion used: HP: " + oldHp + " -> " + player.getHp() + " (+" + healed + ")";
+        return new ActionResult("Potion", msg);
     }
 }

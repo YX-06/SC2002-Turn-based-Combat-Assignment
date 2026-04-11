@@ -12,10 +12,8 @@ public class ActionResult {
     private int damage;
     private Combatant target;
 
-    private int cooldownChange; // cooldown update -> if the action has to set any
-
-    private List<StatusEffect> effects; // status applied from actions
-
+    private int cooldownChange;
+    private List<StatusEffect> effects;
 
     public ActionResult(String actionName, String message) {
         this.actionName = actionName;
@@ -29,24 +27,23 @@ public class ActionResult {
         this.target = target;
     }
 
-    public int getDamage() {return damage;}
-    public Combatant getTarget() {return target;}
-
+    public int getDamage() { return damage; }
+    public Combatant getTarget() { return target; }
 
     // EFFECTS
     public void addEffect(StatusEffect effect) {
         effects.add(effect);
     }
 
-    
-    //COOLDOWN 
+    // COOLDOWN
     public void setCooldownChange(int cooldownChange) {
         this.cooldownChange = cooldownChange;
     }
 
-    public int getCooldownChange() {return cooldownChange;}
+    public int getCooldownChange() { return cooldownChange; }
 
-    //INFO
-    public String getActionName() {return actionName;}
-    public String getMessage() {return message;}
+    // INFO
+    public String getActionName() { return actionName; }
+    public String getMessage() { return message; }
+    
 }

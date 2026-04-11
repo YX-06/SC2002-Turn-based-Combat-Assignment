@@ -30,7 +30,7 @@ public class BasicAttackAction implements Action {
 
         ActionResult result = new ActionResult("BasicAttack", msg);
 
-        result.setDamage(damage, target);
+        result.addDamage(damage, target);
 
         return result;
     }

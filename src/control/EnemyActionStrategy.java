@@ -1,7 +1,7 @@
 package control;
 
-import entity.Action;
 import entity.BattleContext;
+import entity.action.Action;
 import entity.combat.Enemy;
 
 // Strategy interface for enemy AI decision-making.

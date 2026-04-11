@@ -5,12 +5,12 @@ import entity.combat.Combatant;
 import entity.combat.Player;
 import entity.effect.StatusEffect;
 import entity.result.ActionResult;
+import entity.result.DamageInstance;
 import java.util.List;
 
 // Triggers the player's SpecialSkill as a free extra use.
 // Does NOT start or change the cooldown timer.
 public class PowerStone extends Item {
-    private Combatant target;
 
     public PowerStone() {
         super("Power Stone");
@@ -18,8 +18,10 @@ public class PowerStone extends Item {
 
     // Set the target for targeted special skills (e.g. Warrior's Shield Bash).
     // Wizard's Arcane Blast ignores target (hits all enemies).
-    public void setTarget(Combatant target) {
-        this.target = target;
+
+    @Override
+    public boolean requiresTarget() {
+        return true;
     }
 
     @Override
@@ -37,7 +39,9 @@ public class PowerStone extends Item {
                 player.getName() + " → Power Stone used!\n" + skillResult.getMessage()
         );
 
-        result.setDamage(skillResult.getDamage(), skillResult.getTarget());
+        for (DamageInstance dmg : skillResult.getDamages()) {
+            result.addDamage(dmg.getAmount(), dmg.getTarget());
+        }
 
         for (StatusEffect effect : skillResult.getEffects()) {
             result.addEffect(effect);

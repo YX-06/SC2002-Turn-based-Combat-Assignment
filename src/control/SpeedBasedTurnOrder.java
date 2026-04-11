@@ -1,6 +1,6 @@
 package control;
 
-import entity.Combatant;
+import entity.combat.Combatant;
 import java.util.ArrayList;
 import java.util.List;
 

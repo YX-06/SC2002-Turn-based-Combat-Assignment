@@ -2,12 +2,15 @@ package control;
 
 import boundary.BattleUI;
 import entity.*;
+import entity.action.Action;
 import entity.action.ItemAction;
+import entity.combat.Combatant;
 import entity.combat.Enemy;
 import entity.combat.Player;
 import entity.effect.StatusEffect;
 import entity.item.Item;
 import entity.result.ActionResult;
+import entity.result.DamageInstance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +91,9 @@ public class BattleEngine {
             List<Combatant> targets = resolveTargets(action, aliveEnemies);
 
             ActionResult result = action.execute(player, targets);
+            for (DamageInstance dmg : result.getDamages()) {
+                dmg.getTarget().takeDamage(dmg.getAmount());
+            }
 
             applyActionResult(result, player);
 
@@ -102,6 +108,9 @@ public class BattleEngine {
         List<Combatant> targets = List.of(player);
 
         ActionResult result = action.execute(enemy, targets);
+        for (DamageInstance dmg : result.getDamages()) {
+            dmg.getTarget().takeDamage(dmg.getAmount());
+        }
 
         applyActionResult(result, enemy);
 
@@ -129,11 +138,6 @@ public class BattleEngine {
     }
 
     private void applyActionResult(ActionResult result, Combatant user) {
-
-        // Apply damage
-        if (result.getTarget() != null && result.getDamage() > 0) {
-            result.getTarget().takeDamage(result.getDamage());
-        }
 
         // Apply effects
         Combatant target = result.getTarget() != null ? result.getTarget() : user;

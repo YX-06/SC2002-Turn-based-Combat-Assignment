@@ -22,19 +22,20 @@ public class ShieldBash extends SpecialSkillAction {
         int rawDamage = Math.max(0, user.getAtk() - target.getDef());
         int damage = target.modifyIncomingDamage(rawDamage);
         int oldHp = target.getHp();
-        target.takeDamage(damage);
 
-        String msg = user.getName() + " → Shield Bash → " + target.getName()
-                + ": HP " + oldHp + " → " + target.getHp()
+        String msg = user.getName() + " -> Shield Bash -> " + target.getName()
+                + ": HP " + oldHp + " -> " + Math.max(0, oldHp - damage)
                 + " (dmg: " + damage + ") | Stun 2 turns";
 
-        if (!target.isAlive()) {
+        if ((oldHp - damage) <= 0) {
             msg += " | ELIMINATED!";
         }
 
         ActionResult result = new ActionResult(getName(), msg);
-        result.setDamage(damage, target);
-        result.addEffect(new StunEffect(2)); // engine can apply this to the target
+        result.addDamage(damage, target);
+        if (target.isAlive()) {
+            result.addEffect(new StunEffect(2)); // engine can apply this to the target
+        }
 
         return result;
     }

@@ -1,6 +1,6 @@
 package control;
 
-import entity.Combatant;
+import entity.combat.Combatant;
 import java.util.List;
 
 // Strategy interface for determining turn order each round.

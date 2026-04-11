@@ -1,11 +1,10 @@
 package entity.result;
 
+import entity.combat.Combatant;
+import entity.effect.StatusEffect;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import entity.combat.Combatant;
-import entity.effect.StatusEffect;
 
 // holds result of any action execution (damage dealt, effects applied, etc.)
 
@@ -13,25 +12,23 @@ public class ActionResult {
     private String actionName;
     private String message;
 
-    private int damage;
-    private Combatant target;
-
     private List<StatusEffect> effects;
+    private List<DamageInstance> damages = new ArrayList<>(); // Used to see Damage + Target
 
     public ActionResult(String actionName, String message) {
-        this.actionName = actionName;
+        this.actionName = actionName;       
         this.message = message;
         this.effects = new ArrayList<>();
     }
 
     // DAMAGE
-    public void setDamage(int damage, Combatant target) {
-        this.damage = damage;
-        this.target = target;
+    public void addDamage(int amount, Combatant target) {
+        damages.add(new DamageInstance(amount, target));
     }
 
-    public int getDamage() { return damage; }
-    public Combatant getTarget() { return target; }
+    public List<DamageInstance> getDamages() {
+        return Collections.unmodifiableList(damages);
+    }
 
     // EFFECTS
     public void addEffect(StatusEffect effect) {

@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.List;
+
 // items are single use
 
 public abstract class Item {
@@ -12,8 +14,12 @@ public abstract class Item {
     }
 
     // use the item in battle with each subclass having a different result
-    public abstract ActionResult use(Player player, BattleContext context);
+    public abstract ActionResult use(Player player, List<Combatant> targets);
 
+    public boolean requiresTarget() {
+        return false;
+    }
+    
     public void markConsumed() {
         this.consumed = true;
     }

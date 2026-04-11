@@ -8,7 +8,7 @@ public class DefendAction implements Action {
     public ActionResult execute(Combatant user, List<Combatant> targets) {
         StatusEffect defendBuff = new DefendBuffEffect(2, 10);
 
-        String msg = user.getName() + " -> Defend: DEF +10 for 2 turns";
+        String msg = user.getName() + " → Defend: DEF +10 for 2 turns";
 
         ActionResult result = new ActionResult("Defend", msg);
 

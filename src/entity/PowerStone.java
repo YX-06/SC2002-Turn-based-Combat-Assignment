@@ -1,6 +1,5 @@
 package entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 // Triggers the player's SpecialSkill as a free extra use.
@@ -19,32 +18,26 @@ public class PowerStone extends Item {
     }
 
     @Override
-    public ActionResult use(Player player, BattleContext context) {
+    public ActionResult use(Player player, List<Combatant> targets) {
         SpecialSkillAction specialSkill = player.getSpecialSkill();
+
         if (specialSkill == null) {
             return new ActionResult("Power Stone", "Power Stone failed: no special skill found.");
-        }
-
-        List<Combatant> targets = new ArrayList<>();
-        if (specialSkill.requiresTarget()) {
-            if (target == null || !target.isAlive()) {
-                return new ActionResult("Power Stone", "Power Stone failed: invalid target.");
-            }
-            targets.add(target);
-        } else {
-            targets.addAll(context.getAliveEnemies());
         }
 
         ActionResult skillResult = specialSkill.execute(player, targets);
 
         ActionResult result = new ActionResult(
                 "Power Stone",
-                player.getName() + " -> Power Stone used!\n" + skillResult.getMessage()
+                player.getName() + " → Power Stone used!\n" + skillResult.getMessage()
         );
+
         result.setDamage(skillResult.getDamage(), skillResult.getTarget());
+
         for (StatusEffect effect : skillResult.getEffects()) {
             result.addEffect(effect);
         }
+
         return result;
     }
 }

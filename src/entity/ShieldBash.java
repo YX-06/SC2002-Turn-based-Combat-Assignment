@@ -2,9 +2,9 @@ package entity;
 
 import java.util.List;
 
-public class ShieldBashAction extends SpecialSkillAction {
+public class ShieldBash extends SpecialSkillAction {
 
-    public ShieldBashAction() {
+    public ShieldBash() {
         super("Shield Bash", 3);
     }
 
@@ -19,12 +19,13 @@ public class ShieldBashAction extends SpecialSkillAction {
         int rawDamage = Math.max(0, user.getAtk() - target.getDef());
         int damage = target.modifyIncomingDamage(rawDamage);
         int oldHp = target.getHp();
+        target.takeDamage(damage);
 
-        String msg = user.getName() + " -> Shield Bash -> " + target.getName()
-                + ": HP " + oldHp + " -> " + Math.max(0, oldHp - damage)
+        String msg = user.getName() + " → Shield Bash → " + target.getName()
+                + ": HP " + oldHp + " → " + target.getHp()
                 + " (dmg: " + damage + ") | Stun 2 turns";
 
-        if (oldHp - damage <= 0) {
+        if (!target.isAlive()) {
             msg += " | ELIMINATED!";
         }
 

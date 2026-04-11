@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.List;
+
 // Heals player by 100 HP, capped at maxHP.
 // New HP = min(Current HP + 100, Max HP).
 public class Potion extends Item {
@@ -9,7 +11,7 @@ public class Potion extends Item {
     }
 
     @Override
-    public ActionResult use(Player player, BattleContext context) {
+    public ActionResult use(Player player, List<Combatant> targets)  {
         int oldHp = player.getHp();
         player.heal(100);
         int healed = player.getHp() - oldHp;

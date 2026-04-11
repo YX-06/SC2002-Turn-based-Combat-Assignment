@@ -20,18 +20,21 @@ public class ArcaneBlastAction extends SpecialSkillAction {
         sb.append(user.getName()).append(" -> Arcane Blast:");
 
         for (Combatant target : targets) {
+            if (!target.isAlive()) {continue;}
+
             int rawDamage = Math.max(0, user.getAtk() - target.getDef());
             int damage = target.modifyIncomingDamage(rawDamage);
             int oldHp = target.getHp();
-
+            
+            target.takeDamage(damage);
             totalDamage += damage;
 
             sb.append("\n  ").append(target.getName())
               .append(": HP ").append(oldHp)
-              .append(" -> ").append(Math.max(0, oldHp - damage))
+              .append(" -> ").append(target.getHp())
               .append(" (dmg: ").append(damage).append(")");
 
-            if (oldHp - damage <= 0) {
+            if (!target.isAlive()) { // checks if it killed that specific target
                 kills++;
                 sb.append(" | ELIMINATED!");
             }

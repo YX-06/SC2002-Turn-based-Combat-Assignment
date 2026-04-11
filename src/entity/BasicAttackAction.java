@@ -6,6 +6,7 @@ package entity;
 public class BasicAttackAction implements Action {
     private Combatant attacker;
     private Combatant target;
+     
 
     public BasicAttackAction(Combatant attacker, Combatant target) {
         this.attacker = attacker;
@@ -15,27 +16,27 @@ public class BasicAttackAction implements Action {
     @Override
     public ActionResult execute(BattleContext context) {
         int damage = Math.max(0, attacker.getAtk() - target.getDef());
-        if (target.hasEffect(StatusEffectType.SMOKE_BOMB_EFFECT)) {
-            damage = 0;
-        }
+        
         int oldHp = target.getHp();
-        target.takeDamage(damage);
 
-        StringBuilder msg = new StringBuilder();
-        msg.append(attacker.getName()).append(" → BasicAttack → ").append(target.getName());
-        msg.append(": HP: ").append(oldHp).append(" → ").append(target.getHp());
-        msg.append(" (dmg: ").append(attacker.getAtk()).append("-").append(target.getDef()).append("=").append(damage).append(")");
+        String msg = attacker.getName() + " → BasicAttack → " + target.getName()
+                + ": HP: " + oldHp + " → " + (oldHp - damage)
+                + " (dmg: " + attacker.getAtk() + "-" + target.getDef() + "=" + damage + ")";
 
-        if (target.hasEffect(StatusEffectType.SMOKE_BOMB_EFFECT) && damage == 0) {
-            msg.append(" (Smoke Bomb active)");
-        }
-        if (!target.isAlive()) {
-            msg.append(" | ELIMINATED!");
+        if ((oldHp - damage) <= 0) {
+            msg += " | ELIMINATED!";
         }
 
-        return new ActionResult("BasicAttack", damage, msg.toString());
+        ActionResult result = new ActionResult("BasicAttack", msg);
+
+        // describe outcome only
+        result.setDamage(damage, target);
+
+        return result;
     }
 
     @Override
-    public String getName() { return "BasicAttack"; }
+    public String getName() {
+        return "BasicAttack";
+    }
 }

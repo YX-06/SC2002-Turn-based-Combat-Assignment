@@ -167,38 +167,10 @@ public class BattleUI {
         StringBuilder sb = new StringBuilder();
         sb.append(player.getName()).append(" HP: ").append(player.getHp()).append("/").append(player.getMaxHP());
 
-        // Status effects on player
-        for (StatusEffect effect : player.getStatusEffects()) {
-            switch (effect.getType()) {
-                case DEFEND_BUFF:
-                    sb.append(" [DEF+").append(effect.getValue()).append(", ").append(effect.getDuration()).append("t]");
-                    break;
-                case SMOKE_BOMB_EFFECT:
-                    sb.append(" [SmokeBomb ").append(effect.getDuration()).append("t]");
-                    break;
-                case ARCANE_BLAST_BUFF:
-                    sb.append(" [ATK+").append(effect.getValue()).append("]");
-                    break;
-                default:
-                    break;
-            }
-        }
+        
+        
         System.out.println(sb.toString());
 
-        // Enemies status
-        for (Enemy e : allEnemies) {
-            StringBuilder eSb = new StringBuilder();
-            eSb.append("  ").append(e.getName()).append(": ");
-            if (!e.isAlive()) {
-                eSb.append("ELIMINATED");
-            } else {
-                eSb.append("HP: ").append(e.getHp()).append("/").append(e.getMaxHP());
-                if (e.hasEffect(StatusEffectType.STUN_EFFECT)) {
-                    eSb.append(" [STUNNED]");
-                }
-            }
-            System.out.println(eSb.toString());
-        }
 
         // Inventory
         System.out.print("Items: ");

@@ -1,7 +1,7 @@
 package control;
 
-import entity.*;
 import boundary.BattleUI;
+import entity.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,12 +40,9 @@ public class BattleEngine {
 
             battleUI.displayRoundHeader(roundNo, turnOrder);
 
-            // STEP 1: Tick status effects for all alive combatants
-            for (Combatant c : turnOrder) {
-                c.tickEffects();
-            }
+            
 
-            // STEP 2: Check if player alive after effects
+        
             if (!player.isAlive()) {
                 battleUI.displayEliminated(player);
                 return false;
@@ -60,11 +57,8 @@ public class BattleEngine {
                     continue;
                 }
 
-                if (!c.canAct()) {
-                    battleUI.displayStunSkip(c);
-                    // Stunned: do NOT decrement cooldown
-                    continue;
-                }
+                
+                
 
                 if (c instanceof Enemy) {
                     handleEnemyTurn((Enemy) c);
@@ -189,10 +183,7 @@ public class BattleEngine {
                         target = aliveEnemies.get(targetIdx);
                     }
 
-                    ActionResult result = player.executeSpecialSkill(target, context);
-                    player.setCooldown(3);
-                    battleUI.displayActionResult(result);
-                    return true;
+
                 }
 
                 default:

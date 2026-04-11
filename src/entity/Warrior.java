@@ -10,26 +10,6 @@ public class Warrior extends Player {
     }
 
     @Override
-    public ActionResult executeSpecialSkill(Combatant target, BattleContext context) {
-        int damage = Math.max(0, getAtk() - target.getDef());
-        if (target.hasEffect(StatusEffectType.SMOKE_BOMB_EFFECT)) {
-            damage = 0;
-        }
-        int oldHp = target.getHp();
-        target.takeDamage(damage);
-        target.addStatusEffect(new StatusEffect(StatusEffectType.STUN_EFFECT, 0, 2));
-
-        String msg = getName() + " → Shield Bash → " + target.getName()
-                + ": HP: " + oldHp + " → " + target.getHp()
-                + " (dmg: " + getAtk() + "-" + target.getDef() + "=" + damage + ")"
-                + " | " + target.getName() + " STUNNED (2 turns)";
-        if (!target.isAlive()) {
-            msg += " | ELIMINATED!";
-        }
-        return new ActionResult("Shield Bash", damage, msg, true);
-    }
-
-    @Override
     public String getSpecialSkillName() {
         return "Shield Bash";
     }

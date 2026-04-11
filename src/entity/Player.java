@@ -51,9 +51,7 @@ public abstract class Player extends Combatant {
         return false;
     }
 
-    // Execute this player's class-specific special skill.
-    // Warrior: Shield Bash, Wizard: Arcane Blast.
-    public abstract ActionResult executeSpecialSkill(Combatant target, BattleContext context);
+
 
     // Returns the display name of this player's special skill.
     public abstract String getSpecialSkillName();

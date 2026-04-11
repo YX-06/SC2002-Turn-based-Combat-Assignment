@@ -1,32 +1,32 @@
 package entity;
 
-// Represents a status effect applied to a combatant.
-// Effects have a type, a stat modifier value, and a duration in rounds.
-// ArcaneBlastBuff is permanent (does not decrement).
-public class StatusEffect {
-    private StatusEffectType type;
-    private int duration;
-    private int value;
+// Used as an abstract class based on OOP Principle LSP 
+public abstract class StatusEffect {
+    protected int duration; 
 
-    public StatusEffect(StatusEffectType type, int value, int duration) {
-        this.type = type;
-        this.value = value;
-        this.duration = duration;
-    }
+    // called once whenever effefct is applied
+    public abstract void onApply(Combatant target);
+    
+    // code logic on every turn on what it does
+    public abstract void onTick(Combatant target);
 
-    // Decrement the duration by 1. Permanent effects (ArcaneBlastBuff) are not decremented.
-    public void tick() {
-        if (type != StatusEffectType.ARCANE_BLAST_BUFF) {
-            duration--;
+    // any potential expire effect that may be done
+    public abstract void onExpire(Combatant target);
+    
+    // for extensibility in future in case any other status effect may want to prevent action
+    public boolean preventsAction() {
+            return false;
         }
-    }
 
+    public void reduceDuration() {
+        duration--;
+    } 
+    
     public boolean isExpired() {
-        return duration <= 0 && type != StatusEffectType.ARCANE_BLAST_BUFF;
+        return duration <= 0;
     }
+    
 
-    public StatusEffectType getType() { return type; }
-    public int getDuration() { return duration; }
-    public int getValue() { return value; }
-    public void setDuration(int duration) { this.duration = duration; }
 }
+
+

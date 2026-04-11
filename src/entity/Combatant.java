@@ -1,7 +1,6 @@
 package entity;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 // Abstract base class for all combatants (players and enemies).
@@ -42,44 +41,11 @@ public abstract class Combatant {
         hp = Math.min(hp + amount, maxHP);
     }
 
-    // Returns true if the combatant can act (not stunned).
-    public boolean canAct() {
-        return !hasEffect(StatusEffectType.STUN_EFFECT);
-    }
 
-    // Check if the combatant has a specific status effect type.
-    public boolean hasEffect(StatusEffectType type) {
-        for (StatusEffect e : statusEffects) {
-            if (e.getType() == type) return true;
-        }
-        return false;
-    }
 
-    // Add a status effect and apply any immediate stat changes.
-    public void addStatusEffect(StatusEffect effect) {
-        statusEffects.add(effect);
-        if (effect.getType() == StatusEffectType.DEFEND_BUFF) {
-            def += effect.getValue();
-        } else if (effect.getType() == StatusEffectType.ARCANE_BLAST_BUFF) {
-            atk += effect.getValue();
-        }
-    }
+    
 
-    // Tick all status effects: decrement durations, remove expired ones,
-    // and revert stat changes for expired effects.
-    public void tickEffects() {
-        Iterator<StatusEffect> it = statusEffects.iterator();
-        while (it.hasNext()) {
-            StatusEffect effect = it.next();
-            effect.tick();
-            if (effect.isExpired()) {
-                if (effect.getType() == StatusEffectType.DEFEND_BUFF) {
-                    def -= effect.getValue();
-                }
-                it.remove();
-            }
-        }
-    }
+
 
     // Getters and setters
     public String getName() { return name; }

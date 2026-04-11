@@ -8,15 +8,23 @@ import java.util.List;
 public abstract class Player extends Combatant {
     protected int cooldown;
     protected List<Item> inventory;
-
+    protected SpecialSkillAction specialSkill;
+    
     public Player(String name, int maxHP, int atk, int def, int speed) {
         super(name, maxHP, atk, def, speed);
         this.cooldown = 0;
         this.inventory = new ArrayList<>();
     }
 
-    public void setCooldown(int cooldown) {
-        this.cooldown = cooldown;
+    // Applying cooldown
+    public void applyCooldown(int cost) {
+        if (cost > 0) {
+            this.cooldown = cooldown; 
+        }
+        else if (this.cooldown > 0) {
+            this.cooldown--;
+        }
+        
     }
 
     public void decrementCooldown() {
@@ -52,5 +60,7 @@ public abstract class Player extends Combatant {
     }
 
     // Returns the display name of this player's special skill.
-    public abstract String getSpecialSkillName();
+    public SpecialSkillAction getSpecialSkill() {
+        return specialSkill;
+    }
 }

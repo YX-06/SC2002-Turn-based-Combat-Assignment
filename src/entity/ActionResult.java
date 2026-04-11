@@ -1,6 +1,7 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 // holds result of any action execution (damage dealt, effects applied, etc.)
@@ -12,7 +13,6 @@ public class ActionResult {
     private int damage;
     private Combatant target;
 
-    private int cooldownChange;
     private List<StatusEffect> effects;
 
     public ActionResult(String actionName, String message) {
@@ -35,12 +35,11 @@ public class ActionResult {
         effects.add(effect);
     }
 
-    // COOLDOWN
-    public void setCooldownChange(int cooldownChange) {
-        this.cooldownChange = cooldownChange;
+    public List<StatusEffect> getEffects() {
+        return Collections.unmodifiableList(effects);
     }
 
-    public int getCooldownChange() { return cooldownChange; }
+
 
     // INFO
     public String getActionName() { return actionName; }

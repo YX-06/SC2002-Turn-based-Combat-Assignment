@@ -1,27 +1,26 @@
 package entity;
 
-// BasicAttack action: damage = max(0, attacker.atk - target.def).
-// If target has SmokeBombEffect, damage = 0.
-// Used by both players and enemies.
-public class BasicAttackAction implements Action {
-    private Combatant attacker;
-    private Combatant target;
-     
+import java.util.List;
 
-    public BasicAttackAction(Combatant attacker, Combatant target) {
-        this.attacker = attacker;
-        this.target = target;
-    }
+// BasicAttack action: damage = max(0, attacker.atk - target.def)
+// utilised by both player and combatant
+public class BasicAttackAction implements Action {
 
     @Override
-    public ActionResult execute(BattleContext context) {
-        int damage = Math.max(0, attacker.getAtk() - target.getDef());
-        
+    public ActionResult execute(Combatant user, List<Combatant> targets) {
+
+        if (targets.isEmpty()) {
+            throw new IllegalArgumentException("BasicAttack requires a target");
+        }
+
+        Combatant target = targets.get(0);
+
+        int damage = Math.max(0, user.getAtk() - target.getDef());
         int oldHp = target.getHp();
 
-        String msg = attacker.getName() + " → BasicAttack → " + target.getName()
-                + ": HP: " + oldHp + " → " + (oldHp - damage)
-                + " (dmg: " + attacker.getAtk() + "-" + target.getDef() + "=" + damage + ")";
+        String msg = user.getName() + " → BasicAttack → " + target.getName()
+                + ": HP: " + oldHp + " → " + Math.max(0, oldHp - damage)
+                + " (dmg: " + user.getAtk() + "-" + target.getDef() + "=" + damage + ")";
 
         if ((oldHp - damage) <= 0) {
             msg += " | ELIMINATED!";
@@ -29,10 +28,19 @@ public class BasicAttackAction implements Action {
 
         ActionResult result = new ActionResult("BasicAttack", msg);
 
-        // describe outcome only
         result.setDamage(damage, target);
 
         return result;
+    }
+
+    @Override
+    public boolean canExecute(Combatant user) {
+        return true;
+    }
+
+    @Override
+    public boolean requiresTarget() {
+        return true;
     }
 
     @Override

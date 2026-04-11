@@ -4,6 +4,10 @@ package entity;
 public abstract class StatusEffect {
     protected int duration; 
 
+    StatusEffect(int duration) {
+        this.duration = duration;
+    }
+
     // called once whenever effefct is applied
     public abstract void onApply(Combatant target);
     
@@ -25,8 +29,6 @@ public abstract class StatusEffect {
     public boolean isExpired() {
         return duration <= 0;
     }
-    
-
 }
 
 

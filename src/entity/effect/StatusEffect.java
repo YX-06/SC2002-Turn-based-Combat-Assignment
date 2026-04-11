@@ -1,4 +1,6 @@
-package entity;
+package entity.effect;
+
+import entity.combat.Combatant;
 
 // Used as an abstract class based on OOP Principle LSP 
 public abstract class StatusEffect {

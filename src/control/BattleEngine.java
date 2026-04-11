@@ -2,6 +2,13 @@ package control;
 
 import boundary.BattleUI;
 import entity.*;
+import entity.action.ItemAction;
+import entity.combat.Enemy;
+import entity.combat.Player;
+import entity.effect.StatusEffect;
+import entity.item.Item;
+import entity.result.ActionResult;
+
 import java.util.ArrayList;
 import java.util.List;
 

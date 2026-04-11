@@ -1,5 +1,8 @@
-package entity;
+package entity.item;
 
+import entity.combat.Combatant;
+import entity.combat.Player;
+import entity.result.ActionResult;
 import java.util.List;
 
 // items are single use

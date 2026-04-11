@@ -1,5 +1,7 @@
-package entity;
+package entity.combat;
 
+import entity.action.SpecialSkillAction;
+import entity.item.Item;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +21,7 @@ public abstract class Player extends Combatant {
     // Applying cooldown
     public void applyCooldown(int cost) {
         if (cost > 0) {
-            this.cooldown = cooldown; 
+            this.cooldown = cost; 
         }
         else if (this.cooldown > 0) {
             this.cooldown--;

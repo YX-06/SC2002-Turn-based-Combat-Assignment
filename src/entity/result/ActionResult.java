@@ -1,8 +1,11 @@
-package entity;
+package entity.result;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import entity.combat.Combatant;
+import entity.effect.StatusEffect;
 
 // holds result of any action execution (damage dealt, effects applied, etc.)
 

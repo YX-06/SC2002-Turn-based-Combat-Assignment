@@ -1,5 +1,8 @@
 package entity;
 
+import entity.combat.Enemy;
+import entity.combat.Goblin;
+import entity.combat.Wolf;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,5 +1,9 @@
-package entity;
+package entity.action;
 
+import entity.combat.Combatant;
+import entity.combat.Player;
+import entity.item.Item;
+import entity.result.ActionResult;
 import java.util.List;
 
 public class ItemAction implements Action {

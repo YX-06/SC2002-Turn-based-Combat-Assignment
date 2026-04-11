@@ -1,4 +1,9 @@
-package entity;
+package entity.action;
+
+import entity.combat.Combatant;
+import entity.effect.DefendBuffEffect;
+import entity.effect.StatusEffect;
+import entity.result.ActionResult;
 import java.util.List;
 
 // Defend action: applies DefendBuff (+10 DEF, duration=2) to the player.

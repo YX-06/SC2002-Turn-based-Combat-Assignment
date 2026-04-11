@@ -1,6 +1,13 @@
 package control;
 
 import entity.*;
+import entity.combat.Player;
+import entity.combat.Warrior;
+import entity.combat.Wizard;
+import entity.item.Item;
+import entity.item.Potion;
+import entity.item.PowerStone;
+import entity.item.SmokeBomb;
 
 // Handles game initialisation: creates player, items, and level.
 public class GameSetupController {

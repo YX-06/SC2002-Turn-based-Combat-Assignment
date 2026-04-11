@@ -1,4 +1,9 @@
-package entity;
+package entity.combat;
+
+import entity.action.ArcaneBlast;
+import entity.action.BasicAttackAction;
+import entity.action.DefendAction;
+import entity.action.ItemAction;
 
 public class Wizard extends Player {
 
@@ -11,7 +16,7 @@ public class Wizard extends Player {
         actions.add(new ItemAction());
         
         // Special skill
-        this.specialSkill = new ShieldBash();
+        this.specialSkill = new ArcaneBlast();
         actions.add(specialSkill);
     }
 }

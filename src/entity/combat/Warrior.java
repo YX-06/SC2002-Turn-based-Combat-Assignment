@@ -1,4 +1,9 @@
-package entity;
+package entity.combat;
+
+import entity.action.BasicAttackAction;
+import entity.action.DefendAction;
+import entity.action.ItemAction;
+import entity.action.ShieldBash;
 
 // Warrior player class.
 // Stats: HP 260, ATK 40, DEF 20, SPD 30.
@@ -8,16 +13,15 @@ public class Warrior extends Player {
     public Warrior(String name, int maxHP, int atk, int def, int speed) {
         super(name, maxHP, atk, def, speed);
 
-        this.specialSkill = new ShieldBashAction();
         
         // Basic actions
         actions.add(new BasicAttackAction());
         actions.add(new DefendAction());
         actions.add(new ItemAction());
-        actions.add(specialSkill);
+        
 
         // Special skill
-        this.specialSkill = new ShieldBashAction();
+        this.specialSkill = new ShieldBash();
         actions.add(specialSkill);
     }
 }

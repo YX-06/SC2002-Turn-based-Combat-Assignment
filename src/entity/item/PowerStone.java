@@ -1,5 +1,10 @@
-package entity;
+package entity.item;
 
+import entity.action.SpecialSkillAction;
+import entity.combat.Combatant;
+import entity.combat.Player;
+import entity.effect.StatusEffect;
+import entity.result.ActionResult;
 import java.util.List;
 
 // Triggers the player's SpecialSkill as a free extra use.

@@ -1,5 +1,7 @@
-package entity;
+package entity.combat;
 
+import entity.action.Action;
+import entity.effect.StatusEffect;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -24,6 +26,7 @@ public abstract class Combatant {
         this.def = def;
         this.speed = speed;
         this.statusEffects = new ArrayList<>();
+        this.actions = new ArrayList<>();
     }
 
     public Combatant() {

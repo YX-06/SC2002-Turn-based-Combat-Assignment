@@ -1,5 +1,9 @@
-package entity;
+package entity.item;
 
+import entity.combat.Combatant;
+import entity.combat.Player;
+import entity.effect.SmokeBombEffect;
+import entity.result.ActionResult;
 import java.util.List;
 
 // Grants SmokeBombEffect (duration=2): all incoming enemy attacks deal 0 damage

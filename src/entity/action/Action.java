@@ -1,5 +1,7 @@
-package entity;
+package entity.action;
 
+import entity.combat.Combatant;
+import entity.result.ActionResult;
 import java.util.List;
 
 // Interface for all executable actions under combatants

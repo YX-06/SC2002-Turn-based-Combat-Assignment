@@ -1,5 +1,8 @@
-package entity;
+package entity.action;
 
+import entity.combat.Combatant;
+import entity.effect.StunEffect;
+import entity.result.ActionResult;
 import java.util.List;
 
 public class ShieldBash extends SpecialSkillAction {

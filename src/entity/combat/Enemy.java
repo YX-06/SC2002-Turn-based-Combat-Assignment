@@ -1,4 +1,4 @@
-package entity;
+package entity.combat;
 
 // Abstract enemy class. Subclassed by Goblin and Wolf.
 // Enemies always perform BasicAttack on their turn.

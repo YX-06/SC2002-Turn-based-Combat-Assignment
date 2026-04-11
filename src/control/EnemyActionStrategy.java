@@ -1,8 +1,8 @@
 package control;
 
 import entity.Action;
-import entity.Enemy;
 import entity.BattleContext;
+import entity.combat.Enemy;
 
 // Strategy interface for enemy AI decision-making.
 // Extensible: new enemy behaviours can be added without modifying BattleEngine.

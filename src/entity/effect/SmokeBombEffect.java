@@ -1,4 +1,6 @@
-package entity;
+package entity.effect;
+
+import entity.combat.Combatant;
 
 public class SmokeBombEffect extends StatusEffect {
 

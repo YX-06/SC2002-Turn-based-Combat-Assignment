@@ -1,6 +1,8 @@
 package control;
 
 import entity.*;
+import entity.action.BasicAttackAction;
+import entity.combat.Enemy;
 
 // Default enemy strategy(not ai haha) — always chooses BasicAttack targeting the player.
 public class BasicEnemyAI implements EnemyActionStrategy {

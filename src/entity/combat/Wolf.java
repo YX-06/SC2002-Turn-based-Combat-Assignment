@@ -1,4 +1,4 @@
-package entity;
+package entity.combat;
 
 // Wolf enemy type.
 // Stats: HP 40, ATK 45, DEF 5, SPD 35.

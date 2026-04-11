@@ -1,4 +1,7 @@
-package entity;
+package entity.action;
+
+import entity.combat.Combatant;
+import entity.combat.Player;
 
 public abstract class SpecialSkillAction implements Action {
     protected String name;

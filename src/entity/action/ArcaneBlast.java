@@ -1,10 +1,13 @@
-package entity;
+package entity.action;
 
+import entity.combat.Combatant;
+import entity.effect.ArcaneBlastBuffEffect;
+import entity.result.ActionResult;
 import java.util.List;
 
-public class ArcaneBlastAction extends SpecialSkillAction {
+public class ArcaneBlast extends SpecialSkillAction {
 
-    public ArcaneBlastAction() {
+    public ArcaneBlast() {
         super("Arcane Blast", 3);
     }
 

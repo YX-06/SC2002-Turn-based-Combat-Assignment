@@ -1,11 +1,11 @@
 package boundary;
 
 import entity.*;
+import entity.combat.Combatant;
 import entity.combat.Enemy;
 import entity.combat.Player;
 import entity.item.Item;
 import entity.result.ActionResult;
-
 import java.util.List;
 import java.util.Scanner;
 

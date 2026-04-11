@@ -28,11 +28,9 @@ public abstract class Player extends Combatant {
         }
         
     }
+    
 
-    public void decrementCooldown() {
-        if (cooldown > 0) cooldown--;
-    }
-
+  
     public int getCooldown() { return cooldown; }
 
     public boolean canUseSpecialSkill() {
@@ -64,5 +62,9 @@ public abstract class Player extends Combatant {
     // Returns the display name of this player's special skill.
     public SpecialSkillAction getSpecialSkill() {
         return specialSkill;
+    }
+
+    public String getSpecialSkillName() {
+        return specialSkill.getName();
     }
 }

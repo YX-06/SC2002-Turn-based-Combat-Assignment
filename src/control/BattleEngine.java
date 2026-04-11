@@ -11,7 +11,6 @@ import entity.effect.StatusEffect;
 import entity.item.Item;
 import entity.result.ActionResult;
 import entity.result.DamageInstance;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +33,9 @@ public class BattleEngine {
         this.context = new BattleContext(player, level.getAllEnemies(), level);
     }
 
+    public int getRoundNo() {
+        return roundNo;
+    }
     public boolean startBattle() {
         battleUI.displayBattleStart(player, level);
 
@@ -74,7 +76,7 @@ public class BattleEngine {
 
         while (true) {
             List<Action> actions = player.getActions();
-            int choice = battleUI.promptActionChoice(actions, aliveEnemies);
+            int choice = battleUI.promptActionChoice(player, aliveEnemies);
 
             if (choice < 0 || choice >= actions.size()) continue;
 
@@ -82,7 +84,7 @@ public class BattleEngine {
 
             // Item handling (selection only, no logic here)
             if (action instanceof ItemAction itemAction) {
-                List<Item> items = itemAction.getUsableItems();
+                List<Item> items = player.getUsableItems();
                 int itemChoice = battleUI.promptItemChoice(items);
                 if (itemChoice == -1) continue;
                 itemAction.setSelectedItem(items.get(itemChoice));
@@ -95,7 +97,7 @@ public class BattleEngine {
                 dmg.getTarget().takeDamage(dmg.getAmount());
             }
 
-            applyActionResult(result, player);
+            applyActionResult(result);
 
             battleUI.displayActionResult(result);
             return action;
@@ -112,7 +114,7 @@ public class BattleEngine {
             dmg.getTarget().takeDamage(dmg.getAmount());
         }
 
-        applyActionResult(result, enemy);
+        applyActionResult(result);
 
         battleUI.displayActionResult(result);
         return action;
@@ -137,13 +139,11 @@ public class BattleEngine {
         return List.of(aliveEnemies.get(targetIdx));
     }
 
-    private void applyActionResult(ActionResult result, Combatant user) {
+    private void applyActionResult(ActionResult result) {
 
         // Apply effects
-        Combatant target = result.getTarget() != null ? result.getTarget() : user;
-
-        for (StatusEffect effect : result.getEffects()) {
-            target.addStatusEffect(effect);
+         for (StatusEffect effect : result.getEffects()) {
+            effect.getTarget().addStatusEffect(effect);
         }
     }
 
@@ -159,11 +159,9 @@ public class BattleEngine {
                 battleUI.displayBackupSpawn(backup);
                 return false;
             }
-            battleUI.displayVictory(player, roundNo);
             return true;
         }
-        battleUI.displayEliminated(player);
-        return true;
+        return false;
     }
 
     private List<Combatant> getAliveCombatants() {

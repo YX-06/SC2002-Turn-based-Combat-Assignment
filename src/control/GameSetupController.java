@@ -16,9 +16,9 @@ public class GameSetupController {
     // 1 = Warrior, 2 = Wizard.
     public Player createPlayer(int classChoice) {
         switch (classChoice) {
-            case 1: return new Warrior();
-            case 2: return new Wizard();
-            default: return new Warrior();
+            case 1: return new Warrior("Warrior", 150, 20, 10, 5);
+            case 2: return new Wizard("Wizard", 100, 25, 5, 10);
+            default: throw new IllegalArgumentException("Invalid class choice: " + classChoice);
         }
     }
 

@@ -14,9 +14,12 @@ public interface Action {
     // If any action has a cooldown, it will return a different cooldown
     default int getCooldownCost() {return 0;}
     
+    default boolean isAOE() {return false;}
+    
     boolean canExecute(Combatant user);
     
     boolean requiresTarget(); // sets up the boolean if need or not -> pass to battle engine
+
 
     // Returns the display name of this action.
     String getName();

@@ -24,4 +24,5 @@ public class Warrior extends Player {
         this.specialSkill = new ShieldBash();
         actions.add(specialSkill);
     }
+
 }

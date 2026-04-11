@@ -11,14 +11,16 @@ import java.util.List;
 public class DefendAction implements Action {
     @Override
     public ActionResult execute(Combatant user, List<Combatant> targets) {
-        StatusEffect defendBuff = new DefendBuffEffect(2, 10);
-
         String msg = user.getName() + " → Defend: DEF +10 for 2 turns";
-
+        StatusEffect defendBuff = new DefendBuffEffect(2, 10);
+        
         ActionResult result = new ActionResult("Defend", msg);
-
-        // added effects to the ActionResult 
+        
+        defendBuff.setTarget(user);
+        
         result.addEffect(defendBuff);
+
+    
 
         return result;
     }

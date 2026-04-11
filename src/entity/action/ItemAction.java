@@ -51,6 +51,6 @@ public class ItemAction implements Action {
 
     @Override
     public String getName() {
-        return selectedItem != null ? selectedItem.getName() : "Item";
+        return selectedItem.getName();
     }
 }

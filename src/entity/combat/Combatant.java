@@ -67,6 +67,7 @@ public abstract class Combatant {
         }
     }
 
+    
     public boolean canAct() {
         for (StatusEffect effect : statusEffects) {
             if (effect.preventsAction()) {

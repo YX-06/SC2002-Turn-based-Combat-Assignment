@@ -39,7 +39,10 @@ public class ActionResult {
         return Collections.unmodifiableList(effects);
     }
 
-
+    // SET INFO
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     // INFO
     public String getActionName() { return actionName; }

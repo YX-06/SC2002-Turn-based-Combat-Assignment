@@ -12,6 +12,7 @@ public class ArcaneBlast extends SpecialSkillAction {
     }
 
     @Override
+    
     public ActionResult execute(Combatant user, List<Combatant> targets) {
         if (targets == null || targets.isEmpty()) {
             throw new IllegalArgumentException("Arcane Blast requires at least one target.");
@@ -20,34 +21,47 @@ public class ArcaneBlast extends SpecialSkillAction {
         int kills = 0;
         StringBuilder sb = new StringBuilder();
         sb.append(user.getName()).append(" -> Arcane Blast:");
-        ActionResult result = new ActionResult(getName(), sb.toString());
+
+        ActionResult result = new ActionResult(getName(), "");
+
         for (Combatant target : targets) {
-            if (!target.isAlive()) {continue;}
+            if (!target.isAlive()) {
+                continue;
+            }
 
             int rawDamage = Math.max(0, user.getAtk() - target.getDef());
             int damage = target.modifyIncomingDamage(rawDamage);
             int oldHp = target.getHp();
+
             result.addDamage(damage, target);
 
             sb.append("\n  ").append(target.getName())
-              .append(": HP ").append(oldHp)
-              .append(" -> ").append(Math.max(0, oldHp - damage))
-              .append(" (dmg: ").append(damage).append(")");
+            .append(": HP ").append(oldHp)
+            .append(" -> ").append(Math.max(0, oldHp - damage))
+            .append(" (dmg: ").append(damage).append(")");
 
-            if ((oldHp - damage) <= 0) { // checks if it killed that specific target
+            if ((oldHp - damage) <= 0) {
                 kills++;
                 sb.append(" | ELIMINATED!");
             }
         }
 
+        result.setMessage(sb.toString());
+
         if (kills > 0) {
             int atkBuff = kills * 10;
-            result.addEffect(new ArcaneBlastBuffEffect(atkBuff)); // engine can apply to user
+            ArcaneBlastBuffEffect buff = new ArcaneBlastBuffEffect(atkBuff);
+            buff.setTarget(user);
+            result.addEffect(buff);
         }
 
         return result;
     }
-
+    
+    @Override
+    public boolean isAOE() {
+        return true;
+    }
     @Override
     public boolean requiresTarget() {
         return false;

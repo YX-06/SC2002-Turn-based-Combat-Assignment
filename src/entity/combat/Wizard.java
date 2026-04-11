@@ -7,8 +7,8 @@ import entity.action.ItemAction;
 
 public class Wizard extends Player {
 
-    public Wizard() {
-        super("Wizard", 200, 50, 10, 20);
+    public Wizard(String name, int maxHP, int atk, int def, int speed) {
+        super(name, maxHP, atk, def, speed);
         
         // Basic actions
         actions.add(new BasicAttackAction());

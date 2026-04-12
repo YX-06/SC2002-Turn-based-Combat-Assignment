@@ -12,7 +12,7 @@ public class ActionResult {
     private String actionName;
     private String message;
 
-    private List<StatusEffect> effects;
+    private List<EffectInstance> effects;
     private List<DamageInstance> damages = new ArrayList<>(); // Used to see Damage + Target
 
     public ActionResult(String actionName, String message) {
@@ -31,11 +31,11 @@ public class ActionResult {
     }
 
     // EFFECTS
-    public void addEffect(StatusEffect effect) {
-        effects.add(effect);
+    public void addEffect(StatusEffect effect, Combatant target) {
+        effects.add(new EffectInstance(effect, target));
     }
 
-    public List<StatusEffect> getEffects() {
+    public List<EffectInstance> getEffects() {
         return Collections.unmodifiableList(effects);
     }
 

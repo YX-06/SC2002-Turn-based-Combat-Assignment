@@ -5,18 +5,9 @@ import entity.combat.Combatant;
 // Used as an abstract class based on OOP Principle LSP 
 public abstract class StatusEffect {
     protected int duration; 
-    private Combatant target;
 
     StatusEffect(int duration) {
         this.duration = duration;
-    }
-    
-    public void setTarget(Combatant target) {
-        this.target = target; // if any target we set it
-    }
-
-    public Combatant getTarget() {
-        return target;
     }
 
     // called once whenever effefct is applied

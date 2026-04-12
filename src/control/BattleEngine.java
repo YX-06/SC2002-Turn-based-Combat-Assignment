@@ -9,6 +9,7 @@ import entity.combat.Enemy;
 import entity.combat.Player;
 import entity.effect.StatusEffect;
 import entity.item.Item;
+import entity.item.PowerStone;
 import entity.result.ActionResult;
 import entity.result.DamageInstance;
 import java.util.ArrayList;
@@ -48,6 +49,43 @@ public class BattleEngine {
             for (Combatant c : turnOrder) {
                 if (!c.isAlive()) continue;
 
+                // Check turn-preventing effects before reducing duration.
+                if (!c.canAct()) {
+                    battleUI.displayStunSkip(c);
+                    c.tickEffects();
+
+                    if (checkGameEnd()) {
+                        if (!player.isAlive()) {
+                            return false;
+                        }
+
+                        if (handleBackupOrWin()) {
+                            return true;
+                        }
+
+                        continue;
+                    }
+
+                    continue;
+                }
+
+                // Advance normal timed effects at the start of the combatant's turn
+                c.tickEffects();
+
+                if (!c.isAlive()) {
+                    if (checkGameEnd()) {
+                        if (!player.isAlive()) {
+                            return false;
+                        }
+
+                        if (handleBackupOrWin()) {
+                            return true;
+                        }
+
+                        continue;
+                    }
+                }
+
                 Action executedAction;
 
                 if (c instanceof Player) {
@@ -61,9 +99,15 @@ public class BattleEngine {
                 }
 
                 if (checkGameEnd()) {
-                    return !context.getAliveEnemies().isEmpty()
-                            ? false
-                            : handleBackupOrWin();
+                    if (!player.isAlive()) {
+                        return false;
+                    }
+
+                    if (handleBackupOrWin()) {
+                        return true;
+                    }
+
+                    continue;
                 }
             }
 
@@ -89,6 +133,16 @@ public class BattleEngine {
                 if (itemChoice == -1) continue;
                 itemAction.setSelectedItem(items.get(itemChoice));
             }
+            
+            if (!action.canExecute(player)) {
+                if (!player.canUseSpecialSkill()) {
+                    battleUI.displayCooldownMessage(player.getCooldown());
+                } else {
+                    battleUI.displayMessage("Action cannot be executed.");
+                }
+                continue;
+            }
+
 
             List<Combatant> targets = resolveTargets(action, aliveEnemies);
 
@@ -121,7 +175,27 @@ public class BattleEngine {
     }
 
     private List<Combatant> resolveTargets(Action action, List<Enemy> aliveEnemies) {
+        if (action instanceof ItemAction itemAction) {
+            Item item = itemAction.getSelectedItem();
 
+            if (item instanceof PowerStone) {
+                Action skill = player.getSpecialSkill();
+
+                // AOE → hit all enemies
+                if (skill.isAOE()) {
+                    return new ArrayList<>(aliveEnemies);
+                }
+
+                // Only one enemy → auto select
+                if (aliveEnemies.size() == 1) {
+                    return List.of(aliveEnemies.get(0));
+                }
+
+                // Multiple enemies → prompt
+                int targetIdx = battleUI.promptTarget(aliveEnemies);
+                return List.of(aliveEnemies.get(targetIdx));
+            }
+        }
         // No target required (self / defend)
         if (!action.requiresTarget()) {
             if (action.isAOE()) {
@@ -132,7 +206,7 @@ public class BattleEngine {
 
         // Single target
         if (aliveEnemies.size() == 1) {
-            return List.of(aliveEnemies.get(0));
+            return List.of(aliveEnemies.get(0));    
         }
 
         int targetIdx = battleUI.promptTarget(aliveEnemies);

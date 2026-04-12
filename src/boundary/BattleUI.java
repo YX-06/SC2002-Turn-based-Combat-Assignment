@@ -1,6 +1,10 @@
 package boundary;
 
 import entity.*;
+import entity.action.Action;
+import entity.action.DefendAction;
+import entity.action.ItemAction;
+import entity.action.SpecialSkillAction;
 import entity.combat.Combatant;
 import entity.combat.Enemy;
 import entity.combat.Player;
@@ -8,7 +12,6 @@ import entity.item.Item;
 import entity.result.ActionResult;
 import java.util.List;
 import java.util.Scanner;
-
 
 // Displays battle information and collects player action choices during combat.
 // Handles all in-battle display and input (UI only, no game logic).
@@ -105,36 +108,57 @@ public class BattleUI {
         System.out.println(message);
     }
 
-    // Prompt player for an action choice.
-    // Returns: 1=BasicAttack, 2=Defend, 3=Item, 4=SpecialSkill
+    // Prompt player for an action choice
     public int promptActionChoice(Player player, List<Enemy> aliveEnemies) {
         System.out.println();
-        System.out.println(player.getName() + "'s turn (HP: " + player.getHp() + "/" + player.getMaxHP() + ")");
-        System.out.println("  1. BasicAttack");
-        System.out.println("  2. Defend (+10 DEF, 2 turns)");
+    System.out.println(player.getName() + "'s turn (HP: " 
+        + player.getHp() + "/" + player.getMaxHP() + ")");
 
-        // Show Item option with availability
-        if (player.hasUsableItems()) {
-            System.out.print("  3. Item (");
-            List<Item> usable = player.getUsableItems();
-            for (int i = 0; i < usable.size(); i++) {
-                if (i > 0) System.out.print(", ");
-                System.out.print(usable.get(i).getName());
+    List<Action> actions = player.getActions();
+
+    for (int i = 0; i < actions.size(); i++) {
+        Action action = actions.get(i);
+
+        String line = "  " + (i + 1) + ". ";
+
+        // NEVER call getName() for ItemAction
+        if (action instanceof ItemAction) {
+            line += "Item";
+        } else {
+            line += action.getName();
+        }
+
+        if (action instanceof DefendAction) {
+            line += " (+10 DEF, 2 turns)";
+        } 
+        else if (action instanceof ItemAction) {
+            if (player.hasUsableItems()) {
+                line += " (";
+                List<Item> usable = player.getUsableItems();
+
+                for (int j = 0; j < usable.size(); j++) {
+                    if (j > 0) line += ", ";
+                    line += usable.get(j).getName();
+                }
+
+                line += ")";
+            } else {
+                line += " (none available)";
             }
-            System.out.println(")");
-        } else {
-            System.out.println("  3. Item (none available)");
+        } 
+        else if (action instanceof SpecialSkillAction) {
+            if (player.canUseSpecialSkill()) {
+                line += " [READY]";
+            } else {
+                line += " [Cooldown: " + player.getCooldown() + "]";
+            }
         }
 
-        // Show SpecialSkill option with cooldown
-        if (player.canUseSpecialSkill()) {
-            System.out.println("  4. " + player.getSpecialSkillName() + " [READY]");
-        } else {
-            System.out.println("  4. " + player.getSpecialSkillName() + " [Cooldown: " + player.getCooldown() + "]");
-        }
+        System.out.println(line);
+    }
 
-        System.out.print("Choose action (1-4): ");
-        return readInt(1, 4);
+    System.out.print("Choose action (1-" + actions.size() + "): ");
+    return readInt(1, actions.size()) - 1;
     }
 
     // Prompt player to select a target enemy.

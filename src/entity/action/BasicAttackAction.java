@@ -17,7 +17,8 @@ public class BasicAttackAction implements Action {
 
         Combatant target = targets.get(0);
 
-        int damage = Math.max(0, user.getAtk() - target.getDef());
+        int rawDamage = Math.max(0, user.getAtk() - target.getDef());
+        int damage = target.modifyIncomingDamage(rawDamage);
         int oldHp = target.getHp();
 
         String msg = user.getName() + " → BasicAttack → " + target.getName()

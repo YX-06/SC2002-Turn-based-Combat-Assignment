@@ -61,7 +61,7 @@ public class BattleEngine {
                 }
 
                 if (checkGameEnd()) {
-                    return !level.getAliveEnemies().isEmpty()
+                    return !context.getAliveEnemies().isEmpty()
                             ? false
                             : handleBackupOrWin();
                 }
@@ -72,7 +72,7 @@ public class BattleEngine {
     }
 
     private Action handlePlayerTurn() {
-        List<Enemy> aliveEnemies = level.getAliveEnemies();
+        List<Enemy> aliveEnemies = context.getAliveEnemies();
 
         while (true) {
             List<Action> actions = player.getActions();
@@ -148,11 +148,11 @@ public class BattleEngine {
     }
 
     private boolean checkGameEnd() {
-        return !player.isAlive() || level.getAliveEnemies().isEmpty();
+        return !player.isAlive() || context.getAliveEnemies().isEmpty();
     }
 
     private boolean handleBackupOrWin() {
-        if (level.getAliveEnemies().isEmpty()) {
+        if (context.getAliveEnemies().isEmpty()) {
             if (level.hasBackup() && !level.isBackupSpawned()) {
                 List<Enemy> backup = level.spawnBackupWave();
                 context.setEnemies(level.getAllEnemies());

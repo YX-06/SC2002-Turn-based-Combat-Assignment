@@ -70,23 +70,6 @@ public class Level {
         return backup;
     }
 
-    // Check if ALL enemies (initial + backup) are defeated.
-    public boolean allEnemiesDefeated() {
-        for (Enemy e : allEnemies) {
-            if (e.isAlive()) return false;
-        }
-        return true;
-    }
-
-    // Get alive enemies from the full enemy list.
-    public List<Enemy> getAliveEnemies() {
-        List<Enemy> alive = new ArrayList<>();
-        for (Enemy e : allEnemies) {
-            if (e.isAlive()) alive.add(e);
-        }
-        return alive;
-    }
-
     public boolean isBackupSpawned() { return backupSpawned; }
     public boolean hasBackup() { return hasBackup; }
     public String getDifficulty() { return difficulty; }

@@ -1,4 +1,4 @@
-package entity;
+package entity.combat;
 
 // Goblin enemy type.
 // Stats: HP 55, ATK 35, DEF 15, SPD 25.

@@ -49,3 +49,6 @@ build/
 # Windows
 Thumbs.db
 desktop.ini
+
+# Rubrics
+rubrics.txt

@@ -1,5 +1,8 @@
 package entity;
 
+import entity.combat.Enemy;
+import entity.combat.Goblin;
+import entity.combat.Wolf;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,13 +70,7 @@ public class Level {
         return backup;
     }
 
-    // Check if ALL enemies (initial + backup) are defeated.
-    public boolean allEnemiesDefeated() {
-        for (Enemy e : allEnemies) {
-            if (e.isAlive()) return false;
-        }
-        return true;
-    }
+   
 
     // Get alive enemies from the full enemy list.
     public List<Enemy> getAliveEnemies() {

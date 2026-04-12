@@ -1,5 +1,7 @@
-package entity;
+package entity.combat;
 
+import entity.action.SpecialSkillAction;
+import entity.item.Item;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,21 +10,27 @@ import java.util.List;
 public abstract class Player extends Combatant {
     protected int cooldown;
     protected List<Item> inventory;
-
+    protected SpecialSkillAction specialSkill;
+    
     public Player(String name, int maxHP, int atk, int def, int speed) {
         super(name, maxHP, atk, def, speed);
         this.cooldown = 0;
         this.inventory = new ArrayList<>();
     }
 
-    public void setCooldown(int cooldown) {
-        this.cooldown = cooldown;
+    // Applying cooldown
+    public void applyCooldown(int cost) {
+        if (cost > 0) {
+            this.cooldown = cost; 
+        }
+        else if (this.cooldown > 0) {
+            this.cooldown--;
+        }
+        
     }
+    
 
-    public void decrementCooldown() {
-        if (cooldown > 0) cooldown--;
-    }
-
+  
     public int getCooldown() { return cooldown; }
 
     public boolean canUseSpecialSkill() {
@@ -51,10 +59,12 @@ public abstract class Player extends Combatant {
         return false;
     }
 
-    // Execute this player's class-specific special skill.
-    // Warrior: Shield Bash, Wizard: Arcane Blast.
-    public abstract ActionResult executeSpecialSkill(Combatant target, BattleContext context);
-
     // Returns the display name of this player's special skill.
-    public abstract String getSpecialSkillName();
+    public SpecialSkillAction getSpecialSkill() {
+        return specialSkill;
+    }
+
+    public String getSpecialSkillName() {
+        return specialSkill.getName();
+    }
 }

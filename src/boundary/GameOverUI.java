@@ -1,6 +1,9 @@
 package boundary;
 
-import entity.*;
+import entity.combat.Enemy;
+import entity.combat.Player;
+import entity.combat.Wizard;
+import entity.item.Item;
 import java.util.List;
 import java.util.Scanner;
 

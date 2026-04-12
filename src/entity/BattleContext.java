@@ -1,5 +1,7 @@
 package entity;
 
+import entity.combat.Enemy;
+import entity.combat.Player;
 import java.util.ArrayList;
 import java.util.List;
 

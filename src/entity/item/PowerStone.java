@@ -1,0 +1,52 @@
+package entity.item;
+
+import entity.action.SpecialSkillAction;
+import entity.combat.Combatant;
+import entity.combat.Player;
+import entity.effect.StatusEffect;
+import entity.result.ActionResult;
+import entity.result.DamageInstance;
+import java.util.List;
+
+// Triggers the player's SpecialSkill as a free extra use.
+// Does NOT start or change the cooldown timer.
+public class PowerStone extends Item {
+
+    public PowerStone() {
+        super("Power Stone");
+    }
+
+    // Set the target for targeted special skills (e.g. Warrior's Shield Bash).
+    // Wizard's Arcane Blast ignores target (hits all enemies).
+
+    @Override
+    public boolean requiresTarget() {
+        return true;
+    }
+
+    @Override
+    public ActionResult use(Player player, List<Combatant> targets) {
+        SpecialSkillAction specialSkill = player.getSpecialSkill();
+
+        if (specialSkill == null) {
+            return new ActionResult("Power Stone", "Power Stone failed: no special skill found.");
+        }
+
+        ActionResult skillResult = specialSkill.execute(player, targets);
+
+        ActionResult result = new ActionResult(
+                "Power Stone",
+                player.getName() + " → Power Stone used!\n" + skillResult.getMessage()
+        );
+
+        for (DamageInstance dmg : skillResult.getDamages()) {
+            result.addDamage(dmg.getAmount(), dmg.getTarget());
+        }
+
+        for (StatusEffect effect : skillResult.getEffects()) {
+            result.addEffect(effect);
+        }
+
+        return result;
+    }
+}

@@ -1,6 +1,13 @@
 package control;
 
 import entity.*;
+import entity.combat.Player;
+import entity.combat.Warrior;
+import entity.combat.Wizard;
+import entity.item.Item;
+import entity.item.Potion;
+import entity.item.PowerStone;
+import entity.item.SmokeBomb;
 
 // Handles game initialisation: creates player, items, and level.
 public class GameSetupController {
@@ -9,9 +16,9 @@ public class GameSetupController {
     // 1 = Warrior, 2 = Wizard.
     public Player createPlayer(int classChoice) {
         switch (classChoice) {
-            case 1: return new Warrior();
-            case 2: return new Wizard();
-            default: return new Warrior();
+            case 1: return new Warrior("Warrior", 260, 40, 20, 30);
+            case 2: return new Wizard("Wizard", 200, 50, 10, 20);
+            default: throw new IllegalArgumentException("Invalid class choice: " + classChoice);
         }
     }
 

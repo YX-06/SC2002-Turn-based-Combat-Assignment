@@ -1,12 +1,20 @@
 package control;
 
-import entity.*;
 import boundary.BattleUI;
+import entity.*;
+import entity.action.Action;
+import entity.action.ItemAction;
+import entity.combat.Combatant;
+import entity.combat.Enemy;
+import entity.combat.Player;
+import entity.effect.StatusEffect;
+import entity.item.Item;
+import entity.item.PowerStone;
+import entity.result.ActionResult;
+import entity.result.DamageInstance;
 import java.util.ArrayList;
 import java.util.List;
 
-// Core game-loop controller. Manages rounds, turn order, actions, and win/loss conditions.
-// Depends on abstractions (TurnOrderStrategy, EnemyActionStrategy) for extensibility (DIP).
 public class BattleEngine {
     private Player player;
     private Level level;
@@ -26,182 +34,210 @@ public class BattleEngine {
         this.context = new BattleContext(player, level.getAllEnemies(), level);
     }
 
-    // Main gameplay loop — runs rounds until player defeated or all enemies defeated.
-    // Returns true if the player won, false if defeated.
+    public int getRoundNo() {
+        return roundNo;
+    }
     public boolean startBattle() {
         battleUI.displayBattleStart(player, level);
 
         while (true) {
             roundNo++;
 
-            // Build turn order from alive combatants
-            List<Combatant> aliveCombatants = getAliveCombatants();
-            List<Combatant> turnOrder = turnOrderStrategy.determineTurnOrder(aliveCombatants);
-
+            List<Combatant> turnOrder = turnOrderStrategy.determineTurnOrder(getAliveCombatants());
             battleUI.displayRoundHeader(roundNo, turnOrder);
 
-            // STEP 1: Tick status effects for all alive combatants
             for (Combatant c : turnOrder) {
-                c.tickEffects();
-            }
+                if (!c.isAlive()) continue;
 
-            // STEP 2: Check if player alive after effects
-            if (!player.isAlive()) {
-                battleUI.displayEliminated(player);
-                return false;
-            }
-
-            boolean gameEnded = false;
-            boolean playerWon = false;
-
-            // STEP 3: Each combatant acts in turn order
-            for (Combatant c : turnOrder) {
-                if (!c.isAlive()) {
-                    continue;
-                }
-
+                // Check turn-preventing effects before reducing duration.
                 if (!c.canAct()) {
                     battleUI.displayStunSkip(c);
-                    // Stunned: do NOT decrement cooldown
+                    c.tickEffects();
+
+                    if (checkGameEnd()) {
+                        if (!player.isAlive()) {
+                            return false;
+                        }
+
+                        if (handleBackupOrWin()) {
+                            return true;
+                        }
+
+                        continue;
+                    }
+
                     continue;
                 }
 
-                if (c instanceof Enemy) {
-                    handleEnemyTurn((Enemy) c);
+                // Advance normal timed effects at the start of the combatant's turn
+                c.tickEffects();
 
-                    if (!player.isAlive()) {
-                        battleUI.displayEliminated(player);
-                        gameEnded = true;
-                        playerWon = false;
-                        break;
-                    }
-                } else if (c instanceof Player) {
-                    boolean usedSpecialSkill = handlePlayerTurn();
-
-                    // Cooldown management: decrement only if NOT used special skill
-                    if (!usedSpecialSkill) {
-                        player.decrementCooldown();
-                    }
-
-                    // Check victory condition
-                    if (level.getAliveEnemies().isEmpty()) {
-                        if (!level.hasBackup() || level.isBackupSpawned()) {
-                            gameEnded = true;
-                            playerWon = true;
-                            break;
-                        } else {
-                            // Spawn backup wave
-                            List<Enemy> backup = level.spawnBackupWave();
-                            context.setEnemies(level.getAllEnemies());
-                            battleUI.displayBackupSpawn(backup);
+                if (!c.isAlive()) {
+                    if (checkGameEnd()) {
+                        if (!player.isAlive()) {
+                            return false;
                         }
+
+                        if (handleBackupOrWin()) {
+                            return true;
+                        }
+
+                        continue;
                     }
+                }
+
+                Action executedAction;
+
+                if (c instanceof Player) {
+                    executedAction = handlePlayerTurn();
+
+                    // Cooldown handled ONLY here
+                    player.applyCooldown(executedAction.getCooldownCost());
+
+                } else {
+                    executedAction = handleEnemyTurn((Enemy) c);
+                }
+
+                if (checkGameEnd()) {
+                    if (!player.isAlive()) {
+                        return false;
+                    }
+
+                    if (handleBackupOrWin()) {
+                        return true;
+                    }
+
+                    continue;
                 }
             }
 
-            if (gameEnded) {
-                return playerWon;
-            }
-
-            // STEP 4: End-of-round summary
             battleUI.displayTurnSummary(player, level.getAllEnemies());
         }
     }
 
-    // Handle an enemy's turn: choose and execute an action via the AI strategy.
-    private void handleEnemyTurn(Enemy enemy) {
-        Action action = enemyAI.chooseAction(enemy, context);
-        ActionResult result = action.execute(context);
-        battleUI.displayActionResult(result);
-    }
-
-    // Handle the player's turn: prompt for action and execute.
-    // Returns true if the player used their special skill (directly or via PowerStone),
-    // meaning cooldown should NOT be decremented.
-    private boolean handlePlayerTurn() {
-        List<Enemy> aliveEnemies = level.getAliveEnemies();
+    private Action handlePlayerTurn() {
+        List<Enemy> aliveEnemies = context.getAliveEnemies();
 
         while (true) {
-            int actionChoice = battleUI.promptActionChoice(player, aliveEnemies);
+            List<Action> actions = player.getActions();
+            int choice = battleUI.promptActionChoice(player, aliveEnemies);
 
-            switch (actionChoice) {
-                case 1: { // BasicAttack
-                    int targetIdx = 0;
-                    if (aliveEnemies.size() > 1) {
-                        targetIdx = battleUI.promptTarget(aliveEnemies);
-                    }
-                    Action action = new BasicAttackAction(player, aliveEnemies.get(targetIdx));
-                    ActionResult result = action.execute(context);
-                    battleUI.displayActionResult(result);
-                    return false;
-                }
+            if (choice < 0 || choice >= actions.size()) continue;
 
-                case 2: { // Defend
-                    Action action = new DefendAction(player);
-                    ActionResult result = action.execute(context);
-                    battleUI.displayActionResult(result);
-                    return false;
-                }
+            Action action = actions.get(choice);
 
-                case 3: { // Item
-                    List<Item> usableItems = player.getUsableItems();
-                    if (usableItems.isEmpty()) {
-                        battleUI.displayMessage("No items available! Choose another action.");
-                        continue;
-                    }
-                    int itemIdx = battleUI.promptItemChoice(usableItems);
-                    if (itemIdx == -1) {
-                        continue; // back to action menu
-                    }
-                    Item selectedItem = usableItems.get(itemIdx);
-
-                    // PowerStone needs a target for Warrior's Shield Bash
-                    if (selectedItem instanceof PowerStone) {
-                        if (player instanceof Warrior) {
-                            int targetIdx = 0;
-                            if (aliveEnemies.size() > 1) {
-                                targetIdx = battleUI.promptTarget(aliveEnemies);
-                            }
-                            ((PowerStone) selectedItem).setTarget(aliveEnemies.get(targetIdx));
-                        } else {
-                            ((PowerStone) selectedItem).setTarget(null);
-                        }
-                    }
-
-                    ActionResult result = selectedItem.use(player, context);
-                    selectedItem.markConsumed();
-                    battleUI.displayActionResult(result);
-                    return result.isUsedSpecialSkill(); // PowerStone → true
-                }
-
-                case 4: { // SpecialSkill
-                    if (!player.canUseSpecialSkill()) {
-                        battleUI.displayCooldownMessage(player.getCooldown());
-                        continue;
-                    }
-
-                    Combatant target = null;
-                    if (player instanceof Warrior) {
-                        int targetIdx = 0;
-                        if (aliveEnemies.size() > 1) {
-                            targetIdx = battleUI.promptTarget(aliveEnemies);
-                        }
-                        target = aliveEnemies.get(targetIdx);
-                    }
-
-                    ActionResult result = player.executeSpecialSkill(target, context);
-                    player.setCooldown(3);
-                    battleUI.displayActionResult(result);
-                    return true;
-                }
-
-                default:
-                    continue;
+            // Item handling (selection only, no logic here)
+            if (action instanceof ItemAction itemAction) {
+                List<Item> items = player.getUsableItems();
+                int itemChoice = battleUI.promptItemChoice(items);
+                if (itemChoice == -1) continue;
+                itemAction.setSelectedItem(items.get(itemChoice));
             }
+            
+            if (!action.canExecute(player)) {
+                if (!player.canUseSpecialSkill()) {
+                    battleUI.displayCooldownMessage(player.getCooldown());
+                } else {
+                    battleUI.displayMessage("Action cannot be executed.");
+                }
+                continue;
+            }
+
+
+            List<Combatant> targets = resolveTargets(action, aliveEnemies);
+
+            ActionResult result = action.execute(player, targets);
+            for (DamageInstance dmg : result.getDamages()) {
+                dmg.getTarget().takeDamage(dmg.getAmount());
+            }
+
+            applyActionResult(result);
+
+            battleUI.displayActionResult(result);
+            return action;
         }
     }
 
-    // Build a list of all alive combatants (player + enemies).
+    private Action handleEnemyTurn(Enemy enemy) {
+        Action action = enemyAI.chooseAction(enemy, context);
+
+        List<Combatant> targets = List.of(player);
+
+        ActionResult result = action.execute(enemy, targets);
+        for (DamageInstance dmg : result.getDamages()) {
+            dmg.getTarget().takeDamage(dmg.getAmount());
+        }
+
+        applyActionResult(result);
+
+        battleUI.displayActionResult(result);
+        return action;
+    }
+
+    private List<Combatant> resolveTargets(Action action, List<Enemy> aliveEnemies) {
+        if (action instanceof ItemAction itemAction) {
+            Item item = itemAction.getSelectedItem();
+
+            if (item instanceof PowerStone) {
+                Action skill = player.getSpecialSkill();
+
+                // AOE → hit all enemies
+                if (skill.isAOE()) {
+                    return new ArrayList<>(aliveEnemies);
+                }
+
+                // Only one enemy → auto select
+                if (aliveEnemies.size() == 1) {
+                    return List.of(aliveEnemies.get(0));
+                }
+
+                // Multiple enemies → prompt
+                int targetIdx = battleUI.promptTarget(aliveEnemies);
+                return List.of(aliveEnemies.get(targetIdx));
+            }
+        }
+        // No target required (self / defend)
+        if (!action.requiresTarget()) {
+            if (action.isAOE()) {
+                return new ArrayList<>(aliveEnemies);
+            }
+            return List.of();
+        }
+
+        // Single target
+        if (aliveEnemies.size() == 1) {
+            return List.of(aliveEnemies.get(0));    
+        }
+
+        int targetIdx = battleUI.promptTarget(aliveEnemies);
+        return List.of(aliveEnemies.get(targetIdx));
+    }
+
+    private void applyActionResult(ActionResult result) {
+
+        // Apply effects
+         for (StatusEffect effect : result.getEffects()) {
+            effect.getTarget().addStatusEffect(effect);
+        }
+    }
+
+    private boolean checkGameEnd() {
+        return !player.isAlive() || context.getAliveEnemies().isEmpty();
+    }
+
+    private boolean handleBackupOrWin() {
+        if (context.getAliveEnemies().isEmpty()) {
+            if (level.hasBackup() && !level.isBackupSpawned()) {
+                List<Enemy> backup = level.spawnBackupWave();
+                context.setEnemies(level.getAllEnemies());
+                battleUI.displayBackupSpawn(backup);
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
     private List<Combatant> getAliveCombatants() {
         List<Combatant> alive = new ArrayList<>();
         if (player.isAlive()) alive.add(player);
@@ -210,7 +246,4 @@ public class BattleEngine {
         }
         return alive;
     }
-
-    public int getRoundNo() { return roundNo; }
-    public Player getPlayer() { return player; }
 }

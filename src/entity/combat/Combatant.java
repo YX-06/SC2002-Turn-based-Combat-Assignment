@@ -1,5 +1,7 @@
-package entity;
+package entity.combat;
 
+import entity.action.Action;
+import entity.effect.StatusEffect;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +16,7 @@ public abstract class Combatant {
     protected int def;
     protected int speed;
     protected List<StatusEffect> statusEffects;
+    protected List<Action> actions;
 
     public Combatant(String name, int maxHP, int atk, int def, int speed) {
         this.name = name;
@@ -23,6 +26,7 @@ public abstract class Combatant {
         this.def = def;
         this.speed = speed;
         this.statusEffects = new ArrayList<>();
+        this.actions = new ArrayList<>();
     }
 
     public Combatant() {
@@ -32,54 +36,64 @@ public abstract class Combatant {
         return hp > 0;
     }
 
-    // Reduce HP by the given damage amount. HP cannot go below 0.
+    // DAMAGE (Cannot go below 0)
     public void takeDamage(int damage) {
         hp = Math.max(0, hp - damage);
     }
 
-    // Heal by the given amount, capped at maxHP.
+    // HEAL (Capped at maxHP)
     public void heal(int amount) {
         hp = Math.min(hp + amount, maxHP);
     }
 
-    // Returns true if the combatant can act (not stunned).
-    public boolean canAct() {
-        return !hasEffect(StatusEffectType.STUN_EFFECT);
-    }
-
-    // Check if the combatant has a specific status effect type.
-    public boolean hasEffect(StatusEffectType type) {
-        for (StatusEffect e : statusEffects) {
-            if (e.getType() == type) return true;
-        }
-        return false;
-    }
-
-    // Add a status effect and apply any immediate stat changes.
+    // STATUS EFFECTS
     public void addStatusEffect(StatusEffect effect) {
+        effect.onApply(this);
         statusEffects.add(effect);
-        if (effect.getType() == StatusEffectType.DEFEND_BUFF) {
-            def += effect.getValue();
-        } else if (effect.getType() == StatusEffectType.ARCANE_BLAST_BUFF) {
-            atk += effect.getValue();
-        }
     }
 
-    // Tick all status effects: decrement durations, remove expired ones,
-    // and revert stat changes for expired effects.
     public void tickEffects() {
         Iterator<StatusEffect> it = statusEffects.iterator();
+
         while (it.hasNext()) {
             StatusEffect effect = it.next();
-            effect.tick();
+            effect.onTick(this);
+            effect.reduceDuration();
+
             if (effect.isExpired()) {
-                if (effect.getType() == StatusEffectType.DEFEND_BUFF) {
-                    def -= effect.getValue();
-                }
+                effect.onExpire(this);
                 it.remove();
             }
         }
     }
+
+    
+    public boolean canAct() {
+        for (StatusEffect effect : statusEffects) {
+            if (effect.preventsAction()) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    // based on its status effects, checks if the damage its taking in will change
+    public int modifyIncomingDamage(int damage) {
+        int modified = damage;
+
+        for (StatusEffect effect : statusEffects) {
+            modified = effect.modifyIncomingDamage(modified);
+        }
+
+        return modified;
+    }
+
+    
+    // ACTIONS
+    public List<Action> getActions() {
+        return actions;
+    }
+
 
     // Getters and setters
     public String getName() { return name; }

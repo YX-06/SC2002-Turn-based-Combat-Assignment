@@ -11,10 +11,6 @@ public abstract class SpecialSkillAction implements Action {
         this.name = name;
         this.cooldownRounds = cooldownRounds;
     }
-
-    public int getCooldownRounds() {
-        return cooldownRounds;
-    }
     
     @Override
     public int getCooldownCost() {

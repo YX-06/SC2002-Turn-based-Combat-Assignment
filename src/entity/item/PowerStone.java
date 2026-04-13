@@ -3,9 +3,9 @@ package entity.item;
 import entity.action.SpecialSkillAction;
 import entity.combat.Combatant;
 import entity.combat.Player;
-import entity.effect.StatusEffect;
 import entity.result.ActionResult;
 import entity.result.DamageInstance;
+import entity.result.EffectInstance;
 import java.util.List;
 
 // Triggers the player's SpecialSkill as a free extra use.
@@ -15,9 +15,6 @@ public class PowerStone extends Item {
     public PowerStone() {
         super("Power Stone");
     }
-
-    // Set the target for targeted special skills (e.g. Warrior's Shield Bash).
-    // Wizard's Arcane Blast ignores target (hits all enemies).
 
     @Override
     public boolean requiresTarget() {
@@ -43,8 +40,8 @@ public class PowerStone extends Item {
             result.addDamage(dmg.getAmount(), dmg.getTarget());
         }
 
-        for (StatusEffect effect : skillResult.getEffects()) {
-            result.addEffect(effect);
+        for (EffectInstance effect : skillResult.getEffects()) {
+            result.addEffect(effect.getEffect(), effect.getTarget());
         }
 
         return result;

@@ -18,10 +18,9 @@ public class SmokeBomb extends Item {
     public ActionResult use(Player player, List<Combatant> targets)  {
         String msg = player.getName() + " → Item → Smoke Bomb used: Enemy attacks deal 0 damage this turn + next";
         SmokeBombEffect effect = new SmokeBombEffect(2);
-        effect.setTarget(player);
 
         ActionResult result = new ActionResult("Smoke Bomb", msg);
-        result.addEffect(effect);
+        result.addEffect(effect, player);
         return result;
     }
 }

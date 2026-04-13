@@ -51,8 +51,7 @@ public class ArcaneBlast extends SpecialSkillAction {
         if (kills > 0) {
             int atkBuff = kills * 10;
             ArcaneBlastBuffEffect buff = new ArcaneBlastBuffEffect(atkBuff);
-            buff.setTarget(user);
-            result.addEffect(buff);
+            result.addEffect(buff, user);
         }
 
         return result;

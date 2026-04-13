@@ -16,9 +16,7 @@ public class DefendAction implements Action {
         
         ActionResult result = new ActionResult("Defend", msg);
         
-        defendBuff.setTarget(user);
-        
-        result.addEffect(defendBuff);
+        result.addEffect(defendBuff, user);
 
     
 

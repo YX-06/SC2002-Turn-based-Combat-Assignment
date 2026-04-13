@@ -35,8 +35,7 @@ public class ShieldBash extends SpecialSkillAction {
         result.addDamage(damage, target);
         if (target.isAlive()) {
             StunEffect stun = new StunEffect(2);
-            stun.setTarget(target);
-            result.addEffect(stun);
+            result.addEffect(stun, target);
         }
 
         return result;

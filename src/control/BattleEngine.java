@@ -7,11 +7,11 @@ import entity.action.ItemAction;
 import entity.combat.Combatant;
 import entity.combat.Enemy;
 import entity.combat.Player;
-import entity.effect.StatusEffect;
 import entity.item.Item;
 import entity.item.PowerStone;
 import entity.result.ActionResult;
 import entity.result.DamageInstance;
+import entity.result.EffectInstance;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -216,8 +216,8 @@ public class BattleEngine {
     private void applyActionResult(ActionResult result) {
 
         // Apply effects
-         for (StatusEffect effect : result.getEffects()) {
-            effect.getTarget().addStatusEffect(effect);
+         for (EffectInstance effect : result.getEffects()) {
+            effect.getTarget().addStatusEffect(effect.getEffect());
         }
     }
 

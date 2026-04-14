@@ -31,7 +31,7 @@ public class BattleEngine {
         this.turnOrderStrategy = new SpeedBasedTurnOrder();
         this.enemyAI = new BasicEnemyAI();
         this.roundNo = 0;
-        this.context = new BattleContext(player, level.getAllEnemies(), level);
+        this.context = new BattleContext(player, level.getAllEnemies());
     }
 
     public int getRoundNo() {

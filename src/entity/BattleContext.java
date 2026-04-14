@@ -9,17 +9,14 @@ import java.util.List;
 public class BattleContext {
     private Player player;
     private List<Enemy> enemies;
-    private Level level;
 
-    public BattleContext(Player player, List<Enemy> enemies, Level level) {
+    public BattleContext(Player player, List<Enemy> enemies) {
         this.player = player;
         this.enemies = enemies;
-        this.level = level;
     }
 
     public Player getPlayer() { return player; }
     public List<Enemy> getEnemies() { return enemies; }
-    public Level getLevel() { return level; }
 
     // Returns only the alive enemies from the current enemy list.
     public List<Enemy> getAliveEnemies() {

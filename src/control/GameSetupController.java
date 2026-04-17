@@ -9,11 +9,11 @@ import entity.item.Potion;
 import entity.item.PowerStone;
 import entity.item.SmokeBomb;
 
-// Handles game initialisation: creates player, items, and level.
+// handles the setting up of the level
 public class GameSetupController {
 
-    // Create a player based on the class choice.
-    // 1 = Warrior, 2 = Wizard.
+    // create a player based on the class choice
+    // 1 = Warrior, 2 =Wizard
     public Player createPlayer(int classChoice) {
         switch (classChoice) {
             case 1: return new Warrior("Warrior", 260, 40, 20, 30);
@@ -22,8 +22,8 @@ public class GameSetupController {
         }
     }
 
-    // Create an item based on the item choice.
-    // 1 = Potion, 2 = Smoke Bomb, 3 = Power Stone.
+    // create item 
+    // 1 = Potion, 2 = Smoke Bomb, 3 = Power Stone
     public Item createItem(int itemChoice) {
         switch (itemChoice) {
             case 1: return new Potion();
@@ -33,8 +33,8 @@ public class GameSetupController {
         }
     }
 
-    // Create a level based on the difficulty choice.
-    // 1 = Easy, 2 = Medium, 3 = Hard.
+    // create level based on difficulty
+    // 1 = Easy, 2 = Medium, 3 = Hard
     public Level createLevel(int difficulty) {
         String[] names = {"Easy", "Medium", "Hard"};
         return new Level(difficulty, names[difficulty - 1]);

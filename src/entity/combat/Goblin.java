@@ -1,6 +1,6 @@
 package entity.combat;
 
-// Goblin enemy type.
+// Goblin enemy type
 // Stats: HP 55, ATK 35, DEF 15, SPD 25.
 public class Goblin extends Enemy {
 

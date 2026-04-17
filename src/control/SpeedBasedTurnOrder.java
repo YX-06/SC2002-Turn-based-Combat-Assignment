@@ -4,7 +4,7 @@ import entity.combat.Combatant;
 import java.util.ArrayList;
 import java.util.List;
 
-// Default turn order strategy: higher speed goes first.
+// Default turn order strategy - higher speed first
 public class SpeedBasedTurnOrder implements TurnOrderStrategy {
 
     @Override

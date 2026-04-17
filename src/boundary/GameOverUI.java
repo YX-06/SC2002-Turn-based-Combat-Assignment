@@ -56,8 +56,8 @@ public class GameOverUI {
         }
     }
 
-    // Prompt user for post-game choice: Replay / New Game / Exit.
-    // Returns 1=Replay, 2=New Game, 3=Exit.
+    // Prompt user for post-game choice- Replay / New Game /Exit.
+    // Returns 1=Replay, 2=New Game, 3=Exi
     public int promptPostGameChoice() {
         System.out.println();
         System.out.println("What would you like to do?");

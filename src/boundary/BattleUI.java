@@ -13,8 +13,8 @@ import entity.result.ActionResult;
 import java.util.List;
 import java.util.Scanner;
 
-// Displays battle information and collects player action choices during combat.
-// Handles all in-battle display and input (UI only, no game logic).
+// Displays battle information and collects player action choices during combat
+// Handles all in-battle display and input (UI only, no game logic)
 public class BattleUI {
     private Scanner scanner;
 
@@ -50,7 +50,7 @@ public class BattleUI {
         System.out.println("==================================================");
     }
 
-    // Display the round header with round number and turn order.
+    // Display the round header with round number and turn order
     public void displayRoundHeader(int roundNo, List<Combatant> turnOrder) {
         System.out.println();
         System.out.println("--------------------------------------------------");
@@ -66,12 +66,12 @@ public class BattleUI {
         System.out.println();
     }
 
-    // Display the result of an action.
+    // Display the result of an action
     public void displayActionResult(ActionResult result) {
         System.out.println(result.getMessage());
     }
 
-    // Display that a combatant has been eliminated.
+    // Display that a combatant has been eliminated
     public void displayEliminated(Combatant combatant) {
         System.out.println(combatant.getName() + " has been eliminated!");
     }
@@ -85,12 +85,12 @@ public class BattleUI {
         }
     }
 
-    // Display that SpecialSkill is on cooldown.
+    // Display the SpecialSkill is on cooldown
     public void displayCooldownMessage(int remainingCD) {
         System.out.println("Special Skill unavailable! Cooldown: " + remainingCD + " round(s) remaining.");
     }
 
-    // Display backup wave spawn notification.
+    // Display backup wave spawn noti
     public void displayBackupSpawn(List<Enemy> enemies) {
         System.out.println();
         System.out.println("*** BACKUP SPAWN! ***");
@@ -103,7 +103,6 @@ public class BattleUI {
         System.out.println();
     }
 
-    // Display a generic message.
     public void displayMessage(String message) {
         System.out.println(message);
     }
@@ -161,8 +160,8 @@ public class BattleUI {
     return readInt(1, actions.size()) - 1;
     }
 
-    // Prompt player to select a target enemy.
-    // Returns the index in the aliveEnemies list.
+    // Prompt player to select a target enemy
+    // Returns the index in the aliveEnemies list
     public int promptTarget(List<Enemy> aliveEnemies) {
         System.out.println("Select target:");
         for (int i = 0; i < aliveEnemies.size(); i++) {
@@ -175,7 +174,7 @@ public class BattleUI {
     }
 
     // Prompt player to select an item from usable items.
-    // Returns the index in the usableItems list, or -1 to go back.
+    // Returns the index in the usableItems list, or -1 to go back
     public int promptItemChoice(List<Item> usableItems) {
         System.out.println("Select item:");
         for (int i = 0; i < usableItems.size(); i++) {
@@ -187,7 +186,7 @@ public class BattleUI {
         return choice - 1; // -1 means back (0-1), 0+ means item index
     }
 
-    // Display end-of-round summary (HP, effects, inventory, cooldowns).
+    // Display end-of-round summary (HP, effects, inventory, cooldowns)
     public void displayTurnSummary(Player player, List<Enemy> allEnemies) {
         System.out.println();
         System.out.println("--- End of Round ---");

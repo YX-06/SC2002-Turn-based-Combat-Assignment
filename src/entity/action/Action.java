@@ -21,6 +21,6 @@ public interface Action {
     boolean requiresTarget(); // sets up the boolean if need or not -> pass to battle engine
 
 
-    // Returns the display name of this action.
+    // returns the name of action
     String getName();
 }

@@ -4,9 +4,9 @@ import entity.BattleContext;
 import entity.action.Action;
 import entity.combat.Enemy;
 
-// Strategy interface for enemy AI decision-making.
-// Extensible: new enemy behaviours can be added without modifying BattleEngine.
+// strategy interface for enemy strategy to choose
+// extensible and returns action
 public interface EnemyActionStrategy {
-    // Choose an action for the given enemy in the current battle context.
+    // choose specific action for the character
     Action chooseAction(Enemy enemy, BattleContext context);
 }

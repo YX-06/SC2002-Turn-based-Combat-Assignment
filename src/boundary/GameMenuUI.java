@@ -2,8 +2,7 @@ package boundary;
 
 import java.util.Scanner;
 
-// Main menu screen — displays options and collects player setup choices.
-// Separated from battle logic (SRP, UI separated from engine).
+// Main menu screen — displays options and collect player input
 public class GameMenuUI {
     private Scanner scanner;
 

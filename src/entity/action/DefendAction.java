@@ -6,8 +6,8 @@ import entity.effect.StatusEffect;
 import entity.result.ActionResult;
 import java.util.List;
 
-// Defend action: applies DefendBuff (+10 DEF, duration=2) to the player.
-// Increases defense for the current round and the next round.
+// defend action: applies DefendBuff (+10 DEF, duration=2) to player
+// increase defense for the current round and the next round
 public class DefendAction implements Action {
     @Override
     public ActionResult execute(Combatant user, List<Combatant> targets) {

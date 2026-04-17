@@ -7,7 +7,7 @@ import entity.result.ActionResult;
 import java.util.List;
 
 // Grants SmokeBombEffect (duration=2): all incoming enemy attacks deal 0 damage
-// for the current turn and the next turn.
+// for the current turn and the next turn
 public class SmokeBomb extends Item {
 
     public SmokeBomb() {

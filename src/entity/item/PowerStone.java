@@ -9,7 +9,7 @@ import entity.result.EffectInstance;
 import java.util.List;
 
 // Triggers the player's SpecialSkill as a free extra use.
-// Does NOT start or change the cooldown timer.
+// Does NOT start or change the cooldown timer
 public class PowerStone extends Item {
 
     public PowerStone() {

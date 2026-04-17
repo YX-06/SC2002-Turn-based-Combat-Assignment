@@ -49,7 +49,7 @@ public class BattleEngine {
             for (Combatant c : turnOrder) {
                 if (!c.isAlive()) continue;
 
-                // Check turn-preventing effects before reducing duration.
+                // check turn-preventing effects before reducing duration
                 if (!c.canAct()) {
                     battleUI.displayStunSkip(c);
                     c.tickEffects();
@@ -181,17 +181,17 @@ public class BattleEngine {
             if (item instanceof PowerStone) {
                 Action skill = player.getSpecialSkill();
 
-                // AOE → hit all enemies
+                // AOE - hit all enemies
                 if (skill.isAOE()) {
                     return new ArrayList<>(aliveEnemies);
                 }
 
-                // Only one enemy → auto select
+    
                 if (aliveEnemies.size() == 1) {
                     return List.of(aliveEnemies.get(0));
                 }
 
-                // Multiple enemies → prompt
+                // Multiple enemies 
                 int targetIdx = battleUI.promptTarget(aliveEnemies);
                 return List.of(aliveEnemies.get(targetIdx));
             }
@@ -204,7 +204,6 @@ public class BattleEngine {
             return List.of();
         }
 
-        // Single target
         if (aliveEnemies.size() == 1) {
             return List.of(aliveEnemies.get(0));    
         }

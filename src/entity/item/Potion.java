@@ -5,8 +5,8 @@ import entity.combat.Player;
 import entity.result.ActionResult;
 import java.util.List;
 
-// Heals player by 100 HP, capped at maxHP.
-// New HP = min(Current HP + 100, Max HP).
+// Heals player by 100 HP, capped at maxHP
+// new HP = min(Current HP + 100, Max HP)
 public class Potion extends Item {
 
     public Potion() {

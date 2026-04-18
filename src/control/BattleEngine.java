@@ -91,9 +91,6 @@ public class BattleEngine {
                 if (c instanceof Player) {
                     executedAction = handlePlayerTurn();
 
-                    // Cooldown handled ONLY here
-                    player.applyCooldown(executedAction.getCooldownCost());
-
                 } else {
                     executedAction = handleEnemyTurn((Enemy) c);
                 }
@@ -116,6 +113,9 @@ public class BattleEngine {
     }
 
     private Action handlePlayerTurn() {
+        // Cooldown should tick at the start of the player's turn
+        player.applyCooldown(0);
+
         List<Enemy> aliveEnemies = context.getAliveEnemies();
 
         while (true) {
@@ -152,6 +152,10 @@ public class BattleEngine {
             }
 
             applyActionResult(result);
+
+            if (action.getCooldownCost() > 0) {
+                player.applyCooldown(action.getCooldownCost());
+            }
 
             battleUI.displayActionResult(result);
             return action;

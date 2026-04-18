@@ -21,8 +21,8 @@ public class BasicAttackAction implements Action {
         int damage = target.modifyIncomingDamage(rawDamage);
         int oldHp = target.getHp();
 
-        String msg = user.getName() + " → BasicAttack → " + target.getName()
-                + ": HP: " + oldHp + " → " + Math.max(0, oldHp - damage)
+        String msg = user.getName() + " -> BasicAttack -> " + target.getName()
+                + ": HP: " + oldHp + " -> " + Math.max(0, oldHp - damage)
                 + " (dmg: " + user.getAtk() + "-" + target.getDef() + "=" + damage + ")";
 
         if ((oldHp - damage) <= 0) {

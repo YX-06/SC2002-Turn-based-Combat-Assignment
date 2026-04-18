@@ -9,6 +9,9 @@ public class StunEffect extends StatusEffect {
     }
 
     @Override
+    public String getDisplayName() { return "Stun"; }
+
+    @Override
     public void onApply(Combatant target) {
         // nothing
     }

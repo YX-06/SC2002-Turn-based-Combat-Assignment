@@ -71,6 +71,7 @@ public class BattleEngine {
 
                 // Advance normal timed effects at the start of the combatant's turn
                 c.tickEffects();
+                battleUI.displayCombatantEffects(c);
 
                 if (!c.isAlive()) {
                     if (checkGameEnd()) {

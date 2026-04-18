@@ -8,6 +8,7 @@ import entity.action.SpecialSkillAction;
 import entity.combat.Combatant;
 import entity.combat.Enemy;
 import entity.combat.Player;
+import entity.effect.StatusEffect;
 import entity.item.Item;
 import entity.result.ActionResult;
 import java.util.List;
@@ -101,6 +102,21 @@ public class BattleUI {
                     + " | SPD: " + e.getSpeed() + ") enters the battle!");
         }
         System.out.println();
+    }
+
+    public void displayCombatantEffects(Combatant c) {
+        List<StatusEffect> effects = c.getStatusEffects();
+        if (effects.isEmpty()) return;
+        StringBuilder sb = new StringBuilder();
+        sb.append("[").append(c.getName()).append(" Status Effects] ");
+        for (int i = 0; i < effects.size(); i++) {
+            if (i > 0) sb.append(", ");
+            StatusEffect e = effects.get(i);
+            String name = e.getDisplayName();
+            sb.append(name != null ? name : e.getClass().getSimpleName());
+            if (e.getDuration() > 0) sb.append(" (").append(e.getDuration()).append(" turn(s))");
+        }
+        System.out.println(sb.toString());
     }
 
     public void displayMessage(String message) {

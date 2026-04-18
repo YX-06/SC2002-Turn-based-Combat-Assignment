@@ -19,7 +19,8 @@ public class ArcaneBlast extends SpecialSkillAction {
             throw new IllegalArgumentException("Arcane Blast requires at least one target.");
         }
 
-        int kills = 0;
+        int totalAtkBuff = 0;
+        int currentAtk = user.getAtk();
         StringBuilder sb = new StringBuilder();
         sb.append(user.getName()).append(" -> Arcane Blast:");
 
@@ -30,7 +31,7 @@ public class ArcaneBlast extends SpecialSkillAction {
                 continue;
             }
 
-            int rawDamage = Math.max(0, user.getAtk() - target.getDef());
+            int rawDamage = Math.max(0, currentAtk - target.getDef());
             int damage = target.modifyIncomingDamage(rawDamage);
             int oldHp = target.getHp();
 
@@ -52,16 +53,16 @@ public class ArcaneBlast extends SpecialSkillAction {
             .append(" (dmg: ").append(dmgStr).append(")");
 
             if ((oldHp - damage) <= 0) {
-                kills++;
+                totalAtkBuff += 10;
+                currentAtk += 10;
                 sb.append(" | ELIMINATED!");
             }
         }
 
         result.setMessage(sb.toString());
 
-        if (kills > 0) {
-            int atkBuff = kills * 10;
-            ArcaneBlastBuffEffect buff = new ArcaneBlastBuffEffect(atkBuff);
+        if (totalAtkBuff > 0) {
+            ArcaneBlastBuffEffect buff = new ArcaneBlastBuffEffect(totalAtkBuff);
             result.addEffect(buff, user);
         }
 

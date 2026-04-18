@@ -59,7 +59,7 @@ public class BattleUI {
         System.out.println("--------------------------------------------------");
         System.out.print("Turn Order: ");
         for (int i = 0; i < turnOrder.size(); i++) {
-            if (i > 0) System.out.print(" → ");
+            if (i > 0) System.out.print(" -> ");
             Combatant c = turnOrder.get(i);
             System.out.print(c.getName() + " (SPD " + c.getSpeed() + ")");
         }
@@ -77,12 +77,12 @@ public class BattleUI {
         System.out.println(combatant.getName() + " has been eliminated!");
     }
 
-    // Display that a combatant's turn is skipped due to stun.
+    // Display that a combatant's turn is skipped due to stun
     public void displayStunSkip(Combatant combatant) {
         if (!combatant.isAlive()) {
-            System.out.println(combatant.getName() + " → ELIMINATED: Skipped");
+            System.out.println(combatant.getName() + " -> ELIMINATED: Skipped");
         } else {
-            System.out.println(combatant.getName() + " → STUNNED: Turn skipped");
+            System.out.println(combatant.getName() + " -> STUNNED: Turn skipped");
         }
     }
 
@@ -210,11 +210,17 @@ public class BattleUI {
         // Player status
         StringBuilder sb = new StringBuilder();
         sb.append(player.getName()).append(" HP: ").append(player.getHp()).append("/").append(player.getMaxHP());
-
-        
-        
         System.out.println(sb.toString());
 
+        // Enemy alive/eliminated status
+        System.out.println("Enemies:");
+        for (Enemy enemy : allEnemies) {
+            if (enemy.isAlive()) {
+                System.out.println("  " + enemy.getName() + " HP: " + enemy.getHp() + "/" + enemy.getMaxHP() + " [ALIVE]");
+            } else {
+                System.out.println("  " + enemy.getName() + " HP: 0/" + enemy.getMaxHP() + " [ELIMINATED]");
+            }
+        }
 
         // Inventory
         System.out.print("Items: ");

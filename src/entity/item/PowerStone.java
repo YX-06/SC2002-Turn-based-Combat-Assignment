@@ -33,7 +33,7 @@ public class PowerStone extends Item {
 
         ActionResult result = new ActionResult(
                 "Power Stone",
-                player.getName() + " → Power Stone used!\n" + skillResult.getMessage()
+                player.getName() + " -> Power Stone used!\n" + skillResult.getMessage()
         );
 
         for (DamageInstance dmg : skillResult.getDamages()) {

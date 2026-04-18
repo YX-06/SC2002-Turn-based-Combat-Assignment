@@ -85,5 +85,4 @@ javac -d out $(find src -name "*.java")
 java -cp out Main
 ```
 
-## Notes
-- This is a draft README and can be expanded with screenshots, sample gameplay logs, and team/contributor details.
+

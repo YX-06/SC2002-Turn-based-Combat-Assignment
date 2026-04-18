@@ -1,6 +1,7 @@
 package entity.action;
 
 import entity.combat.Combatant;
+import entity.effect.StatusEffect;
 import entity.effect.StunEffect;
 import entity.result.ActionResult;
 import java.util.List;
@@ -23,9 +24,19 @@ public class ShieldBash extends SpecialSkillAction {
         int damage = target.modifyIncomingDamage(rawDamage);
         int oldHp = target.getHp();
 
+        String dmgStr = String.valueOf(damage);
+        if (rawDamage > 0 && damage == 0) {
+            for (StatusEffect e : target.getStatusEffects()) {
+                if (e.modifyIncomingDamage(1) == 0 && e.getDisplayName() != null) {
+                    dmgStr = "cannot damage due to " + e.getDisplayName();
+                    break;
+                }
+            }
+        }
+
         String msg = user.getName() + " -> Shield Bash -> " + target.getName()
                 + ": HP " + oldHp + " -> " + Math.max(0, oldHp - damage)
-                + " (dmg: " + damage + ") | Stun 2 turns";
+                + " (dmg: " + dmgStr + ") | Stun 2 turns";
 
         if ((oldHp - damage) <= 0) {
             msg += " | ELIMINATED!";

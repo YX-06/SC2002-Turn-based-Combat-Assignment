@@ -1,6 +1,7 @@
 package entity.action;
 
 import entity.combat.Combatant;
+import entity.effect.StatusEffect;
 import entity.result.ActionResult;
 import java.util.List;
 
@@ -21,9 +22,19 @@ public class BasicAttackAction implements Action {
         int damage = target.modifyIncomingDamage(rawDamage);
         int oldHp = target.getHp();
 
-        String msg = user.getName() + " -> BasicAttack -> " + target.getName()
-                + ": HP: " + oldHp + " -> " + Math.max(0, oldHp - damage)
-                + " (dmg: " + user.getAtk() + "-" + target.getDef() + "=" + damage + ")";
+        String dmgStr = user.getAtk() + "-" + target.getDef() + "=" + damage;
+        if (rawDamage > 0 && damage == 0) {
+            for (StatusEffect e : target.getStatusEffects()) {
+                if (e.modifyIncomingDamage(1) == 0 && e.getDisplayName() != null) {
+                    dmgStr = "cannot damage due to " + e.getDisplayName();
+                    break;
+                }
+            }
+        }
+
+        String msg = user.getName() + " → BasicAttack → " + target.getName()
+                + ": HP: " + oldHp + " → " + Math.max(0, oldHp - damage)
+                + " (dmg: " + dmgStr + ")";
 
         if ((oldHp - damage) <= 0) {
             msg += " | ELIMINATED!";

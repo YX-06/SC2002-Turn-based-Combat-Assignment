@@ -19,6 +19,11 @@ public abstract class StatusEffect {
     // any potential expire effect that may be done
     public abstract void onExpire(Combatant target);
     
+    // Human-readable name shown in round-start status display; return null to suppress display
+    public abstract String getDisplayName();
+
+    public int getDuration() { return duration; }
+
     public int modifyIncomingDamage(int damage) {
         return damage; // default is no change -> for future effects may change
     }

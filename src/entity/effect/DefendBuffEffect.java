@@ -12,6 +12,9 @@ public class DefendBuffEffect extends StatusEffect {
     }
 
     @Override
+    public String getDisplayName() { return "Defend Buff (+" + amount + " DEF)"; }
+
+    @Override
     public void onApply(Combatant target) {
         target.setDef(target.getDef() + amount);
     }

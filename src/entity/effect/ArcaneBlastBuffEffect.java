@@ -12,6 +12,9 @@ public class ArcaneBlastBuffEffect extends StatusEffect {
     }
 
     @Override
+    public String getDisplayName() { return null; } // permanent buff, no per-round reminder needed
+
+    @Override
     public void onApply(Combatant target) {
         target.setAtk(target.getAtk() + amount);
     }

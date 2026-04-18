@@ -9,6 +9,9 @@ public class SmokeBombEffect extends StatusEffect {
     }
 
     @Override
+    public String getDisplayName() { return "Smoke Bomb"; }
+
+    @Override
     public void onApply(Combatant target) {
         // nothing
     }
